@@ -1,4 +1,4 @@
-// FILE: src/api/useFakeStoreApi.ts
+// FILE: src/api/use-fake-store-api.ts
 // _______________________________________________
 
 import { ProductListType, ProductType } from "../types/types";
