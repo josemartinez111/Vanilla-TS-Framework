@@ -1,25 +1,44 @@
 # Uncle Jose's T-Shirt Shop
 
-This project, developed by Jose Martinez, is an e-commerce Single Page Application (SPA) built from scratch using Vanilla Typescript, HTML, and CSS. It showcases a list of t-shirts, an about page, a products page, and simulates a shopping cart experience. The SPA is built without the use of frameworks like React or Vue, which provides an opportunity to grasp the underlying web development concepts that these frameworks abstract away.
+This project, developed by Jose Martinez, is an e-commerce Single Page
+Application (SPA) built from scratch using Vanilla Typescript, HTML, and
+CSS. It showcases a list of t-shirts, an about page, a products page, and
+simulates a shopping cart experience. The SPA is built without the use of
+frameworks like React or Vue, which provides an opportunity to grasp the
+underlying web development concepts that these frameworks abstract away.
 
 ## Key Features
 
-- **Vanilla TypeScript**: The project uses TypeScript, a statically typed superset of JavaScript, to bring type-safety and improved developer tooling to the project. Working with Vanilla TypeScript, as opposed to a framework like React or Vue, provides a more fundamental understanding of JavaScript, the Document Object Model (DOM), and state management.
+- **Vanilla TypeScript**: The project uses TypeScript, a statically typed
+  superset of JavaScript, to bring type-safety and improved developer
+  tooling to the project. Working with Vanilla TypeScript, as opposed to a
+  framework like React or Vue, provides a more fundamental understanding of
+  JavaScript, the Document Object Model (DOM), and state management.
 
-- **Custom Routing**: Unlike using a routing library as in most React or Vue applications, this project implements custom routing using the browser's `hashchange` event. This functionality allows for navigation between different views without a full page reload, providing a SPA-like user experience.
+- **Custom Routing**: Unlike using a routing library as in most React or
+  Vue applications, this project implements custom routing using the
+  browser's `hashchange` event. This functionality allows for navigation
+  between different views without a full page reload, providing an SPA like
+  user experience.
 
 ##### Code Example - Custom Routing
+
 ```ts
 // FILE: hooks/router/use-router.ts
 // _______________________________________________
 
 import { AboutPage, CartPage, HomePage, ProductsPage } from "../pages";
 
-export function useRouter(rootElement: HTMLElement) {
-	const useRouteChange = async (): Promise<void> => { // make this function async
+type RouteChangeType = {
+	useRouteChange: () => Promise<void>
+}
+
+export function useRouter(rootElement: HTMLElement): RouteChangeType {
+	// make this function async
+	const useRouteChange = async (): Promise<void> => {
 		// clear the root element content
 		rootElement.innerHTML = '';
-		
+		// used for when selecting a product & then it opens in the about page
 		const [routeName, productId] = location.hash.split('/');
 		
 		switch (routeName) {
@@ -29,7 +48,7 @@ export function useRouter(rootElement: HTMLElement) {
 			case '#about':
 				rootElement.appendChild(await AboutPage(productId));
 				break;
-			case '#products': // New case for 'products'
+			case '#products':
 				rootElement.appendChild(await ProductsPage());
 				break;
 			case '#cart':
@@ -44,12 +63,16 @@ export function useRouter(rootElement: HTMLElement) {
 		useRouteChange,
 	};
 }
-
 ```
 
-- **Reusable Components**: The project uses a component-based architecture, a concept central to most modern web development frameworks. Components such as header, footer, and navbar are reused across different pages to maintain consistency. Each component is implemented as a function that returns a DOM element, which can then be appended where necessary.
+- **Reusable Components**: The project uses a component-based architecture,
+  a concept central to most modern web development frameworks. Components
+  such as header, footer, and navbar are reused across different pages to
+  maintain consistency. Each component is implemented as a function that
+  returns a DOM element, which can then be appended where necessary.
 
 ##### Code Example - Reusable Component
+
 ```ts
 // FILE: components/products/products.ts
 // _______________________________________________
@@ -60,18 +83,18 @@ import './products.css';
 
 export async function ProductsComponent(category: string, limit: number = 24): Promise<DocumentFragment> {
 	const { getProductsInCategory } = useFakeStoreApi();
-	const products = await getProductsInCategory(category, limit);
+	const productData = await getProductsInCategory(category, limit);
 	
 	const fragment = new DocumentFragment();
 	
-	const productList = document.createElement('div');
-	productList.classList.add('product-list'); // Add the class directly to the markup
+	const productListDivElement = document.createElement('div');
+	productListDivElement.classList.add('product-list'); // Add the class directly to the markup
 	
-	products.forEach((product: ProductType) => {
-		const productElement = document.createElement('div');
-		productElement.classList.add('product-item'); // Add the class directly to the markup
+	productData.forEach((product: ProductType) => {
+		const productDivElement = document.createElement('div');
+		productDivElement.classList.add('product-item'); // Add the class directly to the markup
 		
-		productElement.innerHTML = `
+		productDivElement.innerHTML = `
       <h2 class="product-title">${ product.title }</h2>
       <div class="product-image">
         <img src="${ product.image }" alt="${ product.title }" />
@@ -80,18 +103,20 @@ export async function ProductsComponent(category: string, limit: number = 24): P
       <button>Add to Cart</button>
     `;
 		
-		productElement.onclick = () => {
+		// On product click, update URL hash to render 
+		// the corresponding about page & displays product info
+		productDivElement.onclick = () => {
 			location.hash = `#about/${ product.id }`;
 		};
 		
-		productList.appendChild(productElement);
+		productListDivElement.appendChild(productDivElement);
 	});
 	
-	fragment.appendChild(productList);
+	fragment.appendChild(productListDivElement);
 	return fragment;
 }
-
 ```
+
 ```ts
 // FILE: pages/products/products.ts
 // _______________________________________________
@@ -109,13 +134,13 @@ export async function ProductsPage(): Promise<DocumentFragment> {
 	fragment.appendChild(NavbarComponent());
 	fragment.appendChild(HeaderComponent());
 	
-	// Fetch men's clothing
-	const mensClothing = await ProductsComponent("men's clothing");
-	fragment.appendChild(mensClothing);
+	// Fetch men's clothing (Component is `async`)
+	const mensClothingDataFromComponent = await ProductsComponent("men's clothing");
+	fragment.appendChild(mensClothingDataFromComponent);
 	
-	// Fetch women's clothing
-	const womensClothing = await ProductsComponent("women's clothing");
-	fragment.appendChild(womensClothing);
+	// Fetch women's clothing (Component is `async`)
+	const womensClothingDataFromComponent = await ProductsComponent("women's clothing");
+	fragment.appendChild(womensClothingDataFromComponent);
 	
 	fragment.appendChild(FooterComponent());
 	
@@ -123,9 +148,14 @@ export async function ProductsPage(): Promise<DocumentFragment> {
 }
 ```
 
-- **API Integration**: This project integrates with the Fake Store API to fetch product data. This simulates the experience of fetching and displaying data from a real back-end service. Typically, a framework would provide hooks or other abstractions to handle this, but in this project it's handled manually with the fetch API.
+- **API Integration**: This project integrates with the Fake Store API to
+  fetch product data. This simulates the experience of fetching and
+  displaying data from a real back-end service. Typically, a framework
+  would provide hooks or other abstractions to handle this, but in this
+  project it's handled manually with the fetch API.
 
 ##### Code Example - API Integration
+
 ```ts
 // FILE: src/api/use-fake-store-api.ts
 // _______________________________________________
@@ -152,7 +182,7 @@ export function useFakeStoreApi() {
 	};
 	
 	const getProductsInCategory = async (category: string, limit: number = 20): Promise<ProductListType> => {
-		const response = await fetch(`https://fakestoreapi.com/products/category/${category}?limit=${limit}`);
+		const response = await fetch(`https://fakestoreapi.com/products/category/${ category }?limit=${ limit }`);
 		const products = await response.json() as ProductListType;
 		
 		// Check if the number of products is less than the desired limit
@@ -161,7 +191,7 @@ export function useFakeStoreApi() {
 			const additionalProductsNeeded = limit - products.length;
 			const duplicatedProducts = Array.from({ length: additionalProductsNeeded }, (_, index) => {
 				const sourceProductIndex = index % products.length;
-				const clonedProduct = { ...products[sourceProductIndex] }; // Clone the product using the spread operator
+				const clonedProduct = { ...products[ sourceProductIndex ] }; // Clone the product using the spread operator
 				return clonedProduct;
 			});
 			
@@ -196,9 +226,13 @@ export function useFakeStoreApi() {
 }
 ```
 
-- **Modular Design**: The application is designed in a modular way, similar to the structure of projects developed with more complex frameworks. Each component, page, and hook is contained in its own module, allowing for better maintainability and scalability.
+- **Modular Design**: The application is designed in a modular way, similar
+  to the structure of projects developed with more complex frameworks. Each
+  component, page, and hook is contained in its own module, allowing for
+  better maintainability and scalability.
 
 ##### Code Example - Modular Design
+
 ```elixir
 .
 ├── README.md
@@ -258,9 +292,13 @@ export function useFakeStoreApi() {
 22 directories, 32 files
 ```
 
-- **State Management**: State management in this application is handled manually, without the use of a state management library. This gives a deep understanding of how state flows through the application, a fundamental concept in web development.
+- **State Management**: State management in this application is handled
+  manually, without the use of a state management library. This gives a
+  deep understanding of how state flows through the application, a
+  fundamental concept in web development.
 
 ##### Code Example - State Management
+
 ```ts
 // FILE: components/about/about.ts
 // _______________________________________________
@@ -270,27 +308,27 @@ import './about.css';
 
 export async function AboutComponent(productId?: string): Promise<DocumentFragment> {
 	const fragment = new DocumentFragment();
-	const aboutInfo = document.createElement('div');
+	const aboutInfoDivElement = document.createElement('div');
 	
 	if (productId) {
 		const { getSingleProduct } = useFakeStoreApi();
-		const product = await getSingleProduct(Number(productId));
+		const productData = await getSingleProduct(Number(productId));
 		
-		const productElement = document.createElement('div');
-		productElement.classList.add('about-product');
+		const productDivElement = document.createElement('div');
+		productDivElement.classList.add('about-product');
 		
-		productElement.innerHTML = `
-      <h1>${ product.title }</h1>
-      <img src="${ product.image }" alt="${ product.title }" />
-      <p class="description">${ product.description }</p>
-      <p class="product-price">$${ product.price.toFixed(2) }</p>
+		productDivElement.innerHTML = `
+      <h1>${ productData.title }</h1>
+      <img src="${ productData.image }" alt="${ productData.title }" />
+      <p class="description">${ productData.description }</p>
+      <p class="product-price">$${ productData.price.toFixed(2) }</p>
       <button>Add to Cart</button>
     `;
 		
-		fragment.appendChild(productElement);
+		fragment.appendChild(productDivElement);
 	}
 	
-	aboutInfo.innerHTML = productId ? '' : `
+	aboutInfoDivElement.innerHTML = productId ? '' : `
   <div class="about-info">
     <h1>About Uncle Jose's T-Shirt Site</h1>
     <p class="about-description">Welcome to Uncle Jose's T-Shirt Site! Our story begins with a passion for unique,
@@ -303,23 +341,52 @@ export async function AboutComponent(productId?: string): Promise<DocumentFragme
   </div>
 `;
 	
-	fragment.appendChild(aboutInfo);
+	fragment.appendChild(aboutInfoDivElement);
 	return fragment;
 }
 ```
+```ts
+// src/pages/about/about.ts
+// _______________________________________________
+
+import {
+	AboutComponent,
+	FooterComponent,
+	HeaderComponent,
+	NavbarComponent,
+} from "../../components";
+
+export async function AboutPage(productId?: string): Promise<DocumentFragment> {
+	const fragment = new DocumentFragment();
+	
+	fragment.appendChild(NavbarComponent());
+	fragment.appendChild(HeaderComponent());
+	
+	const mainElement = document.createElement('main');
+	const aboutProduct = await AboutComponent(productId);
+	mainElement.appendChild(aboutProduct);
+	
+	fragment.appendChild(mainElement);
+	fragment.appendChild(FooterComponent());
+	
+	return fragment;
+}
+```
+
 ## Project Structure
 
 - `src`: Contains the TypeScript source code.
-  - `components`: Contains reusable UI components.
-  - `pages`: Contains the different views of the application.
-  - `router`: Contains the custom router hook.
-  - `api`: Contains the service to fetch data from the Fake Store API.
-  - `styles`: Contains the global CSS styles.
+    - `components`: Contains reusable UI components.
+    - `pages`: Contains the different views of the application.
+    - `router`: Contains the custom router hook.
+    - `api`: Contains the service to fetch data from the Fake Store API.
+    - `styles`: Contains the global CSS styles.
 - `public`: Contains static assets such as images and fonts.
 
 ## Running the Project
 
-You can run the project locally using the Vite development server. First, install the dependencies using `npm install` or `pnpm install`, then run:
+You can run the project locally using the Vite development server. First,
+install the dependencies using `npm install` `npm i` or `pnpm install` `pnpm i`, then run:
 
 ```zsh
 npm run dev

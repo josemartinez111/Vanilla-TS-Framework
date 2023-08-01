@@ -9,14 +9,14 @@ export function CartPage(): DocumentFragment {
 	fragment.appendChild(NavbarComponent());
 	fragment.appendChild(HeaderComponent());
 	
-	const body = document.createElement('main');
+	const mainElement = document.createElement('main');
 	
-	body.innerHTML = `
+	mainElement.innerHTML = `
     <h1>Your Cart</h1>
     <p>Review the items in your cart and proceed to checkout.</p>
   `;
 	
-	fragment.appendChild(body);
+	fragment.appendChild(mainElement);
 	fragment.appendChild(FooterComponent());
 	
 	return fragment;

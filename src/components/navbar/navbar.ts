@@ -4,8 +4,8 @@
 import './navbar.css';
 
 export function NavbarComponent(): HTMLElement {
-	const navbar = document.createElement('nav');
-	navbar.classList.add("navbar");
+	const navbarNavElement = document.createElement('nav');
+	navbarNavElement.classList.add("navbar");
 	
 	const routes = ['home', 'about', 'products', 'cart'];
 	
@@ -26,12 +26,12 @@ export function NavbarComponent(): HTMLElement {
 		})
 		.join('');
 	
-	navbar.innerHTML = `
+	navbarNavElement.innerHTML = `
     <div class="nav-links">
       <ul class="nav-list">${ listItems }</ul>
     </div>
   `;
 	
-	return navbar;
+	return navbarNavElement;
 }
 

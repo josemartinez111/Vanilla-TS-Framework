@@ -14,13 +14,13 @@ export async function ProductsPage(): Promise<DocumentFragment> {
 	fragment.appendChild(NavbarComponent());
 	fragment.appendChild(HeaderComponent());
 	
-	// Fetch men's clothing
-	const mensClothing = await ProductsComponent("men's clothing");
-	fragment.appendChild(mensClothing);
+	// Fetch men's clothing (Component is `async`)
+	const mensClothingDataFromComponent = await ProductsComponent("men's clothing");
+	fragment.appendChild(mensClothingDataFromComponent);
 	
-	// Fetch women's clothing
-	const womensClothing = await ProductsComponent("women's clothing");
-	fragment.appendChild(womensClothing);
+	// Fetch women's clothing (Component is `async`)
+	const womensClothingDataFromComponent = await ProductsComponent("women's clothing");
+	fragment.appendChild(womensClothingDataFromComponent);
 	
 	fragment.appendChild(FooterComponent());
 	
