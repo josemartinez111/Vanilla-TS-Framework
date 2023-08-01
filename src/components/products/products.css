@@ -4,6 +4,7 @@
   display:               grid;
   grid-template-columns: repeat(3, 1fr); /* Three items per row */
   grid-gap:              10px; /* Add a little space between each item */
+  cursor: pointer;
 }
 
 .product-item {
@@ -46,6 +47,13 @@
 
 .product-price {
   /* You can style the product price as needed */
+  font-family: "Audiowide", serif;
+  color:       black;
+}
+
+.product-price:hover {
+  color:  #ff9900;
+  cursor: pointer;
 }
 
 /* Update media queries to properly handle different screen sizes */
@@ -60,10 +68,4 @@
   .product-list {
     grid-template-columns: 1fr; /* One item per row on very small screens */
   }
-}
-
-/* The scrollable container styles */
-.scrollable-container {
-  max-height: calc(100vh - 150px); /* Adjust the value as needed to account for the footer's height */
-  overflow-y: auto;
 }

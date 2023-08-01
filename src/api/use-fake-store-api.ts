@@ -22,11 +22,27 @@ export function useFakeStoreApi() {
 		return products;
 	};
 	
-	const getProductsInCategory = async (category: string, limit: number = 10): Promise<ProductListType> => {
-		const response = await fetch(`https://fakestoreapi.com/products/category/${ category }?limit=${ limit }`);
-		const products = await (response.json()) as ProductListType;
+	const getProductsInCategory = async (category: string, limit: number = 20): Promise<ProductListType> => {
+		const response = await fetch(`https://fakestoreapi.com/products/category/${category}?limit=${limit}`);
+		const products = await response.json() as ProductListType;
+		
+		// Check if the number of products is less than the desired limit
+		if (products.length < limit) {
+			// Duplicate the existing products to fill up the remaining slots
+			const additionalProductsNeeded = limit - products.length;
+			const duplicatedProducts = Array.from({ length: additionalProductsNeeded }, (_, index) => {
+				const sourceProductIndex = index % products.length;
+				const clonedProduct = { ...products[sourceProductIndex] }; // Clone the product using the spread operator
+				return clonedProduct;
+			});
+			
+			// Append the duplicated products to the product's array
+			products.push(...duplicatedProducts);
+		}
+		
 		return products;
 	};
+	
 	
 	const getSortedProducts = async (order: 'asc' | 'desc'): Promise<ProductListType> => {
 		const response = await fetch(`https://fakestoreapi.com/products?sort=${ order }`);

@@ -6,4 +6,5 @@ export * from './footer/footer';
 export * from './header/header';
 export * from './navbar/navbar';
 export * from './products/products';
+export * from './about/about';
 // _______________________________________________

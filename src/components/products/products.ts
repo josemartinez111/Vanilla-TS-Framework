@@ -1,10 +1,11 @@
 // FILE: components/products/products.ts
 // _______________________________________________
 
+import { ProductType } from "../../types/types";
 import { useFakeStoreApi } from "../../api/use-fake-store-api";
 import './products.css';
 
-export async function ProductsComponent(category: string, limit: number = 10): Promise<DocumentFragment> {
+export async function ProductsComponent(category: string, limit: number = 24): Promise<DocumentFragment> {
 	const { getProductsInCategory } = useFakeStoreApi();
 	const products = await getProductsInCategory(category, limit);
 	
@@ -13,7 +14,7 @@ export async function ProductsComponent(category: string, limit: number = 10): P
 	const productList = document.createElement('div');
 	productList.classList.add('product-list'); // Add the class directly to the markup
 	
-	products.forEach(product => {
+	products.forEach((product: ProductType) => {
 		const productElement = document.createElement('div');
 		productElement.classList.add('product-item'); // Add the class directly to the markup
 		
@@ -22,9 +23,13 @@ export async function ProductsComponent(category: string, limit: number = 10): P
       <div class="product-image">
         <img src="${ product.image }" alt="${ product.title }" />
       </div>
-      <p class="product-description">${ product.description }</p>
-      <p class="product-price">${ product.price }</p>
+      <p class="product-price">$${ product.price.toFixed(2) }</p>
+      <button>Add to Cart</button>
     `;
+		
+		productElement.onclick = () => {
+			location.hash = `#about/${ product.id }`;
+		};
 		
 		productList.appendChild(productElement);
 	});
