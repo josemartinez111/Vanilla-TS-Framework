@@ -1,0 +1,63 @@
+/* FILE: components/navbar/navbar.css */
+
+.navbar {
+  list-style-type:  none;
+  padding:          10px 30px;
+  overflow:         hidden;
+  background-color: #0f1111;
+  position:         fixed;
+  top:              0;
+  left:             0;
+  width:            100vw;
+  box-sizing:       border-box;
+  display:          flex; /* Use flexbox to align items */
+  justify-content:  flex-end; /* Align items to the right */
+}
+
+.nav-item {
+  margin-left: 25px; /* Add space between links */
+}
+
+.nav-link {
+  display:         block;
+  color:           white;
+  text-align:      center;
+  padding:         7px 16px;
+  text-decoration: none;
+  position:        relative; /* Position relative to the parent element */
+  border:          1px solid transparent; /* Add a transparent border to prevent layout shift */
+  transition:      opacity 0.3s ease; /* Add a smooth transition to the opacity */
+}
+
+.nav-links .nav-list {
+  margin-right:    50px; /* Add a right margin to the list of links */
+  display:         flex; /* Align list items horizontally */
+  justify-content: space-between; /* Distribute space evenly between links */
+}
+
+.nav-link:hover {
+  border:        1px solid white;
+  border-radius: 4px;
+  color: #ff9900;
+}
+
+.nav-link:active {
+  opacity: 0.2; /* Lower the opacity when the link is active */
+}
+
+.nav-item:last-child .nav-link:hover {
+  border:        1px solid white;
+  border-radius: 4px; /* Use the same border radius as the link */
+}
+
+.nav-item:last-child .nav-link img {
+  width:         35px;
+  height:        auto;
+  border-radius: 4px;
+}
+
+.nav-link img {
+  height: auto;
+  width: 20px; /* Adjust as needed */
+}
+

@@ -6,8 +6,8 @@ import { FooterComponent, HeaderComponent, NavbarComponent } from "../../compone
 export function AboutPage(): DocumentFragment {
 	const fragment = new DocumentFragment();
 	
-	fragment.appendChild(HeaderComponent());
 	fragment.appendChild(NavbarComponent());
+	fragment.appendChild(HeaderComponent());
 	
 	const body = document.createElement('main');
 	
