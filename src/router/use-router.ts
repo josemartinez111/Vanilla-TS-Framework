@@ -3,11 +3,16 @@
 
 import { AboutPage, CartPage, HomePage, ProductsPage } from "../pages";
 
-export function useRouter(rootElement: HTMLElement) {
-	const useRouteChange = async (): Promise<void> => { // make this function async
+type RouteChangeType = {
+	useRouteChange: () => Promise<void>
+}
+
+export function useRouter(rootElement: HTMLElement): RouteChangeType {
+	// make this function async
+	const useRouteChange = async (): Promise<void> => {
 		// clear the root element content
 		rootElement.innerHTML = '';
-		
+		// used for when selecting a product & then it opens in the about page
 		const [routeName, productId] = location.hash.split('/');
 		
 		switch (routeName) {
@@ -17,7 +22,7 @@ export function useRouter(rootElement: HTMLElement) {
 			case '#about':
 				rootElement.appendChild(await AboutPage(productId));
 				break;
-			case '#products': // New case for 'products'
+			case '#products':
 				rootElement.appendChild(await ProductsPage());
 				break;
 			case '#cart':

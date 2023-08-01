@@ -9,14 +9,14 @@ export function HomePage(): DocumentFragment {
 	fragment.appendChild(NavbarComponent());
 	fragment.appendChild(HeaderComponent());
 	
-	const body = document.createElement('main');
+	const mainElement = document.createElement('main');
 	
-	body.innerHTML = `
+	mainElement.innerHTML = `
 		<h1>Welcome to Uncle Jose's T-Shirt Site!</h1>
     <p>Discover our unique, handmade t-shirts.</p>
 	`;
 	
-	fragment.appendChild(body);
+	fragment.appendChild(mainElement);
 	fragment.appendChild(FooterComponent());
 	
 	return fragment;

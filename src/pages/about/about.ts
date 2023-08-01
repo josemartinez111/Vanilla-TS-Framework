@@ -14,11 +14,11 @@ export async function AboutPage(productId?: string): Promise<DocumentFragment> {
 	fragment.appendChild(NavbarComponent());
 	fragment.appendChild(HeaderComponent());
 	
-	const body = document.createElement('main');
+	const mainElement = document.createElement('main');
 	const aboutProduct = await AboutComponent(productId);
-	body.appendChild(aboutProduct);
+	mainElement.appendChild(aboutProduct);
 	
-	fragment.appendChild(body);
+	fragment.appendChild(mainElement);
 	fragment.appendChild(FooterComponent());
 	
 	return fragment;

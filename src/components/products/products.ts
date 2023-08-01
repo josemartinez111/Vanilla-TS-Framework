@@ -7,18 +7,18 @@ import './products.css';
 
 export async function ProductsComponent(category: string, limit: number = 24): Promise<DocumentFragment> {
 	const { getProductsInCategory } = useFakeStoreApi();
-	const products = await getProductsInCategory(category, limit);
+	const productData = await getProductsInCategory(category, limit);
 	
 	const fragment = new DocumentFragment();
 	
-	const productList = document.createElement('div');
-	productList.classList.add('product-list'); // Add the class directly to the markup
+	const productListDivElement = document.createElement('div');
+	productListDivElement.classList.add('product-list'); // Add the class directly to the markup
 	
-	products.forEach((product: ProductType) => {
-		const productElement = document.createElement('div');
-		productElement.classList.add('product-item'); // Add the class directly to the markup
+	productData.forEach((product: ProductType) => {
+		const productDivElement = document.createElement('div');
+		productDivElement.classList.add('product-item'); // Add the class directly to the markup
 		
-		productElement.innerHTML = `
+		productDivElement.innerHTML = `
       <h2 class="product-title">${ product.title }</h2>
       <div class="product-image">
         <img src="${ product.image }" alt="${ product.title }" />
@@ -27,13 +27,15 @@ export async function ProductsComponent(category: string, limit: number = 24): P
       <button>Add to Cart</button>
     `;
 		
-		productElement.onclick = () => {
+		// On product click, update URL hash to render
+		// the corresponding about page & displays product info
+		productDivElement.onclick = () => {
 			location.hash = `#about/${ product.id }`;
 		};
 		
-		productList.appendChild(productElement);
+		productListDivElement.appendChild(productDivElement);
 	});
 	
-	fragment.appendChild(productList);
+	fragment.appendChild(productListDivElement);
 	return fragment;
 }
