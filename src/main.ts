@@ -2,13 +2,13 @@
 // _______________________________________________
 
 import './styles/main.css';
-import { useRoute } from "./router/use-route";
+import { useRouter } from "./router/use-router";
 
 // Select the root element where the app will be rendered
 const app = document.querySelector<HTMLDivElement>('#app')!;
 
-// Use the custom hook useRoute
-const { useRouteChange } = useRoute(app);
+// Use the custom hook useRouter
+const { useRouteChange } = useRouter(app);
 
 /**
  * @hashchange

@@ -1,20 +1,22 @@
 // src/pages/about/about.ts
 // _______________________________________________
 
-import { FooterComponent, HeaderComponent, NavbarComponent } from "../../components";
+import {
+	AboutComponent,
+	FooterComponent,
+	HeaderComponent,
+	NavbarComponent,
+} from "../../components";
 
-export function AboutPage(): DocumentFragment {
+export async function AboutPage(productId?: string): Promise<DocumentFragment> {
 	const fragment = new DocumentFragment();
 	
 	fragment.appendChild(NavbarComponent());
 	fragment.appendChild(HeaderComponent());
 	
 	const body = document.createElement('main');
-	
-	body.innerHTML = `
-    <h1>About Uncle Jose's T-Shirt Site</h1>
-    <p>Learn about our story and our unique, handmade t-shirts.</p>
-  `;
+	const aboutProduct = await AboutComponent(productId);
+	body.appendChild(aboutProduct);
 	
 	fragment.appendChild(body);
 	fragment.appendChild(FooterComponent());
