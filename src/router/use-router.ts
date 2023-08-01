@@ -1,7 +1,6 @@
 // FILE: hooks/router/use-router.ts
 // _______________________________________________
 
-
 import { AboutPage, CartPage, HomePage, ProductsPage } from "../pages";
 
 export function useRouter(rootElement: HTMLElement) {

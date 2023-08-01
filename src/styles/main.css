@@ -8,6 +8,13 @@
   font-style:  normal;
 }
 
+@font-face {
+  font-family: "Audiowide Regular";
+  src:         url("/assets/fonts/Audiowide-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style:  normal;
+}
+
 body {
   font-family: "Gotham Ssm", sans-serif;
   padding-top: 100px;
