@@ -1,31 +1,37 @@
 // FILE: components/navbar/navbar.ts
 // _______________________________________________
 
-/**
- * @NavbarComponent function.
- * This function generates a navigation bar (navbar) component.
- * It creates a list of links (routes) for the application's different views
- * (Home, About, Cart).
- * @returns {HTMLElement} The navbar component as an HTML element.
- */
+import './navbar.css';
+
 export function NavbarComponent(): HTMLElement {
-	// Create a new 'nav' element
 	const navbar = document.createElement('nav');
+	navbar.classList.add("navbar");
 	
-	// Define the list of routes for the application
-	const routes = ['home', 'about', 'cart'];
-	// Generate list items with links for each
-	// route, capitalizing the visible text.
+	const routes = ['home', 'about', 'products', 'cart'];
+	
 	const listItems = routes
 		.map((route: string) => {
-			// Capitalizes the first letter and leaves the rest of the string as is.
-			const capitalizedRoute = `${ route[ 0 ].toUpperCase() }${ route.substring(1) }`;
-			return `<li><a href="#${ route }">${ capitalizedRoute }</a></li>`;
+			const capitalizedRoute = `${ route[0].toUpperCase() }${ route.substring(1) }`;
+			return (`
+        <li class="nav-item">
+          <a class="nav-link" href="#${ route }">
+            ${
+							route === 'cart'
+								? `<img src="/assets/images/white_amz_cart.png" alt="Cart">`
+								: capitalizedRoute
+			       }
+          </a>
+        </li>
+      `);
 		})
 		.join('');
 	
-	// Set the inner HTML of the navbar to an 'ul'
-	// element containing the list items.
-	navbar.innerHTML = `<ul>${ listItems }</ul>`;
+	navbar.innerHTML = `
+    <div class="nav-links">
+      <ul class="nav-list">${ listItems }</ul>
+    </div>
+  `;
+	
 	return navbar;
 }
+

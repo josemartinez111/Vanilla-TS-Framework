@@ -2,7 +2,7 @@
 // _______________________________________________
 
 import './styles/main.css';
-import { useRoute } from "./hooks/router/use-route";
+import { useRoute } from "./router/use-route";
 
 // Select the root element where the app will be rendered
 const app = document.querySelector<HTMLDivElement>('#app')!;
@@ -19,4 +19,4 @@ const { useRouteChange } = useRoute(app);
 // Listen for URL changes and handle them
 window.addEventListener('hashchange', useRouteChange);
 // Handle & display the initial URL
-useRouteChange();
+useRouteChange().then();

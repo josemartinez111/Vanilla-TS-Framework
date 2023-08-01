@@ -1,0 +1,69 @@
+/* FILE: components/products/products.css */
+
+.product-list {
+  display:               grid;
+  grid-template-columns: repeat(3, 1fr); /* Three items per row */
+  grid-gap:              10px; /* Add a little space between each item */
+}
+
+.product-item {
+  display:          flex; /* Use Flexbox for individual product items */
+  flex-direction:   column;
+  align-items:      center;
+  justify-content:  center; /* Vertically center the elements */
+  width:            100%;
+  background-color: #f9f9f9; /* A light background */
+  border-radius:    5px; /* Rounded corners */
+  padding:          10px;
+  box-sizing:       border-box;
+  text-align:       center;
+}
+
+.product-title {
+  font-size:     16px;
+  margin-bottom: 5px;
+}
+
+.product-image {
+  width:         50%; /* Make the images half their current size */
+  height:        150px; /* Set a fixed height for the product image container */
+  overflow:      hidden; /* Hide any overflowing content */
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.product-image img {
+  width:      100%;
+  height:     100%;
+  object-fit: contain; /* Scale down images to fit entirely within the container */
+}
+
+.product-description {
+  max-height:    80px; /* Limit the description's height */
+  overflow:      hidden;
+  text-overflow: ellipsis; /* Add ellipsis for overflow text */
+}
+
+.product-price {
+  /* You can style the product price as needed */
+}
+
+/* Update media queries to properly handle different screen sizes */
+
+@media (max-width: 900px) {
+  .product-list {
+    grid-template-columns: repeat(2, 1fr); /* Two items per row on small screens */
+  }
+}
+
+@media (max-width: 600px) {
+  .product-list {
+    grid-template-columns: 1fr; /* One item per row on very small screens */
+  }
+}
+
+/* The scrollable container styles */
+.scrollable-container {
+  max-height: calc(100vh - 150px); /* Adjust the value as needed to account for the footer's height */
+  overflow-y: auto;
+}

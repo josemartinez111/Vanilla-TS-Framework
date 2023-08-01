@@ -1,5 +1,19 @@
 /* FILE: styles/main.css */
 /* ________________________________________ */
 
+@font-face {
+  font-family: 'Gotham Ssm';
+  src: url('/assets/fonts/Gotham-ssm-medium.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
 
+body {
+  font-family: 'Gotham Ssm', sans-serif;
+  padding-bottom: 60px; /* Space for the footer */
+}
+
+main {
+  margin-top: 100px;
+}
 /* ________________________________________ */

@@ -5,4 +5,5 @@
 export * from './home/home';
 export * from './about/about';
 export * from './cart/cart';
+export * from './products/products';
 // _______________________________________________
