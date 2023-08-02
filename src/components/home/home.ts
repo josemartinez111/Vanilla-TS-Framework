@@ -18,7 +18,10 @@ export function HomeComponent(): DocumentFragment {
 					<h1>Welcome to Uncle Jose's T-Shirt Site!</h1>
 					<p class="home-paragraph">
 						Discover our unique, handmade t-shirts & other
-						products as well.<br>For the best in quality apparel for men & women
+						products as well.<br>For the best in quality apparel for men & women,
+						come see us! We would love to provide you quality service that only old
+						Uncle Jose can provide.
+						See you inside!
 					</p>
 				</div>
 			</div>

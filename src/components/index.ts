@@ -3,6 +3,7 @@
 
 // EXAMPLE
 export * from './about/about';
+export * from './cart/cart';
 export * from './footer/footer';
 export * from './header/header';
 export * from './home/home';

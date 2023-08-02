@@ -1,9 +1,10 @@
-// src/pages/cart/cart.ts
+// FILE: pages/cart/cart.ts
 // _______________________________________________
 
-import { FooterComponent, HeaderComponent, NavbarComponent } from "../../components";
+import { CartComponent, FooterComponent, HeaderComponent, NavbarComponent } from "../../components";
+import { useFakeStoreApi } from "../../api/use-fake-store-api";
 
-export function CartPage(): DocumentFragment {
+export async function CartPage(productId?: string): Promise<DocumentFragment> {
 	const groupedDomNodesFragment = new DocumentFragment();
 	
 	groupedDomNodesFragment.appendChild(NavbarComponent());
@@ -11,10 +12,13 @@ export function CartPage(): DocumentFragment {
 	
 	const mainElement = document.createElement('main');
 	
-	mainElement.innerHTML = `
-    <h1>Your Cart</h1>
-    <p>Review the items in your cart and proceed to checkout.</p>
-  `;
+	// If a productId was provided, fetch the product and display it in the cart
+	if (productId) {
+		const { getSingleProduct } = useFakeStoreApi();
+		const productData = await getSingleProduct(Number(productId));
+		const cartComponent = CartComponent(productData);
+		mainElement.appendChild(cartComponent);
+	}
 	
 	groupedDomNodesFragment.appendChild(mainElement);
 	groupedDomNodesFragment.appendChild(FooterComponent());

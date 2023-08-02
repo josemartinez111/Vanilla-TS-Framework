@@ -14,6 +14,7 @@
   justify-content: center;
   color: white;
   height: 80px; /* Set a fixed height for the footer */
+  z-index: 1000;
 }
 
 .footer-content {
