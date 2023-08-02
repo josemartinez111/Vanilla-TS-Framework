@@ -3,9 +3,9 @@
 
 export function HeaderComponent(): HTMLElement {
 	const header = document.createElement('header');
-	header.innerHTML = `
+	header.innerHTML = (`
 		<h1>Uncle Jose's T-Shirt Site</h1>
-	`;
+	`);
 	
 	return header;
 }

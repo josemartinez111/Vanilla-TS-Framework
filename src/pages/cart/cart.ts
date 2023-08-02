@@ -4,10 +4,10 @@
 import { FooterComponent, HeaderComponent, NavbarComponent } from "../../components";
 
 export function CartPage(): DocumentFragment {
-	const fragment = new DocumentFragment();
+	const groupedDomNodesFragment = new DocumentFragment();
 	
-	fragment.appendChild(NavbarComponent());
-	fragment.appendChild(HeaderComponent());
+	groupedDomNodesFragment.appendChild(NavbarComponent());
+	groupedDomNodesFragment.appendChild(HeaderComponent());
 	
 	const mainElement = document.createElement('main');
 	
@@ -16,8 +16,8 @@ export function CartPage(): DocumentFragment {
     <p>Review the items in your cart and proceed to checkout.</p>
   `;
 	
-	fragment.appendChild(mainElement);
-	fragment.appendChild(FooterComponent());
+	groupedDomNodesFragment.appendChild(mainElement);
+	groupedDomNodesFragment.appendChild(FooterComponent());
 	
-	return fragment;
+	return groupedDomNodesFragment;
 }

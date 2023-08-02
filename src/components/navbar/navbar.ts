@@ -26,11 +26,14 @@ export function NavbarComponent(): HTMLElement {
 		})
 		.join('');
 	
-	navbarNavElement.innerHTML = `
-    <div class="nav-links">
-      <ul class="nav-list">${ listItems }</ul>
+	navbarNavElement.innerHTML = (`
+    <div class="navbar-content">
+      <div class="unc">Uncle Jose's T-Shirt</div>
+      <div class="nav-links">
+        <ul class="nav-list">${ listItems }</ul>
+      </div>
     </div>
-  `;
+  `);
 	
 	return navbarNavElement;
 }

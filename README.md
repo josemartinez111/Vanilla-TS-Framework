@@ -231,7 +231,7 @@ export function useFakeStoreApi() {
   component, page, and hook is contained in its own module, allowing for
   better maintainability and scalability.
 
-##### Code Example - Modular Design
+## Modular Design:
 
 ```elixir
 .
