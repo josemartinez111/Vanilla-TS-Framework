@@ -61,6 +61,10 @@
   text-overflow: ellipsis;
 }
 
+button.go-back {
+  margin-top: 10px;
+}
+
 
 
 /* ________________________________________ */
