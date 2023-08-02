@@ -7,6 +7,8 @@ simulates a shopping cart experience. The SPA is built without the use of
 frameworks like React or Vue, which provides an opportunity to grasp the
 underlying web development concepts that these frameworks abstract away.
 
+<img width="750" alt="home-page" src="public/assets/images/readme-images/home-page.png">
+
 ## Key Features
 
 - **Vanilla TypeScript**: The project uses TypeScript, a statically typed
@@ -34,35 +36,40 @@ type RouteChangeType = {
 }
 
 export function useRouter(rootElement: HTMLElement): RouteChangeType {
-	// make this function async
 	const useRouteChange = async (): Promise<void> => {
-		// clear the root element content
 		rootElement.innerHTML = '';
-		// used for when selecting a product & then it opens in the about page
-		const [routeName, productId] = location.hash.split('/');
+		
+		let [routeName, productId] = location.hash.split('/');
+		// remove the '#' from routeName
+		routeName = routeName.replace('#', '');
 		
 		switch (routeName) {
-			case '#home':
+			case 'home':
 				rootElement.appendChild(HomePage());
 				break;
-			case '#about':
+			case 'about':
 				rootElement.appendChild(await AboutPage(productId));
 				break;
-			case '#products':
+			case 'products':
 				rootElement.appendChild(await ProductsPage());
 				break;
-			case '#cart':
-				rootElement.appendChild(CartPage());
+			case 'cart':
+				rootElement.appendChild(await CartPage(productId));
 				break;
 			default:
 				location.hash = 'home';
+				routeName = 'home';
 		}
+		
+		// Dispatch a custom event with the new route name
+		window.dispatchEvent(new CustomEvent('routechange', { detail: routeName }));
 	};
 	
 	return {
 		useRouteChange,
 	};
 }
+
 ```
 
 - **Reusable Components**: The project uses a component-based architecture,
@@ -73,78 +80,173 @@ export function useRouter(rootElement: HTMLElement): RouteChangeType {
 
 ##### Code Example - Reusable Component
 
+<img width="550" alt="home-page" src="public/assets/images/readme-images/cart-default.png"> <img width="550" alt="home-page" src="public/assets/images/readme-images/cart-item.png">
+
+```ts
+// FILE: components/cart/cart.ts
+// _______________________________________________
+
+import { ProductType } from "../../types/types";
+import { useCartData } from '../../hooks/use-cart-data';
+import './cart.css';
+
+export function CartComponent(product?: ProductType): DocumentFragment {
+	const {
+		productData: defaultProductData,
+		bindGoBackButton,
+		paypalIcon,
+		applePayIcon,
+	} = useCartData();
+	
+	const productData = product || defaultProductData;
+	
+	const divElement = document.createElement('div');
+	divElement.innerHTML = (`
+    <div class="cart-container">
+      <div class="cart-side cart-item">
+        <img class="cart-image ${ product
+		? ''
+		: 'default-image' }" src="${ productData.image }" alt="${ productData.title }" />
+        <div class="cart-title">${ productData.title }</div>
+        <div class="cart-price">$${ productData.price.toFixed(2) }</div>
+        <div class="pay-option">
+          <button class="btn btn-icon">
+            <img class="btn-icon" src="${ paypalIcon }" alt="PayPal" />
+          </button>
+        </div>
+        <div class="pay-option">
+          <button class="btn btn-icon">
+            <img class="btn-icon" src="${ applePayIcon }" alt="Apple Pay" />
+          </button>
+        </div>
+      </div>
+      <div class="cart-side pay-form">
+        <input class="cart-input" type="text" id="name" name="name" placeholder="Name" required />
+        <label class="cart-input-label" for="name">Name</label>
+        <input class="cart-input" type="email" id="email" name="email" placeholder="Email" required />
+        <label class="cart-input-label" for="email">Email</label>
+        <input class="cart-input" type="text" id="card" name="card" placeholder="💳    • • • •  • • • •  • • • •" required />
+        <label class="cart-input-label" for="card">Credit Card</label>
+        <button class="btn pay-now" type="submit">
+          Pay Now
+        </button>
+        <button class="btn go-back">
+          Go Back to Products
+        </button>
+      </div>
+    </div>
+  `);
+	
+	bindGoBackButton(divElement);
+	
+	const groupedDomNodesFragment = document.createDocumentFragment();
+	while (divElement.firstChild) {
+		groupedDomNodesFragment.appendChild(divElement.firstChild);
+	}
+	
+	return groupedDomNodesFragment;
+}
+```
+
+<img width="670" alt="home-page" src="public/assets/images/readme-images/products-page.png">
+
 ```ts
 // FILE: components/products/products.ts
 // _______________________________________________
 
+// FILE: components/products/products.ts
+// _______________________________________________
+
+import { useProductEvents } from "../../hooks";
 import { ProductType } from "../../types/types";
 import { useFakeStoreApi } from "../../api/use-fake-store-api";
 import './products.css';
 
 export async function ProductsComponent(category: string, limit: number = 24): Promise<DocumentFragment> {
+	const {
+		onProductContentClick,
+		onAddToCartButtonClick,
+	} = useProductEvents();
 	const { getProductsInCategory } = useFakeStoreApi();
-	const productData = await getProductsInCategory(category, limit);
 	
-	const fragment = new DocumentFragment();
+	// fetching the data from the API based on the category and limit of items
+	const productData = await getProductsInCategory(category, limit);
+	// creating a DocumentFragment to group the DOM nodes
+	const groupedDomNodesFragment = new DocumentFragment();
 	
 	const productListDivElement = document.createElement('div');
-	productListDivElement.classList.add('product-list'); // Add the class directly to the markup
+	productListDivElement.classList.add('product-list');
 	
 	productData.forEach((product: ProductType) => {
 		const productDivElement = document.createElement('div');
-		productDivElement.classList.add('product-item'); // Add the class directly to the markup
+		productDivElement.classList.add('product-item');
 		
-		productDivElement.innerHTML = `
-      <h2 class="product-title">${ product.title }</h2>
-      <div class="product-image">
-        <img src="${ product.image }" alt="${ product.title }" />
+		productDivElement.innerHTML = (`
+      <div class="product-content" data-id="${ product.id }">
+        <h2 class="product-title">${ product.title }</h2>
+        <div class="product-image">
+          <img src="${ product.image }" alt="${ product.title }" />
+        </div>
+        <p class="product-price">$${ product.price.toFixed(2) }</p>
       </div>
-      <p class="product-price">$${ product.price.toFixed(2) }</p>
-      <button>Add to Cart</button>
-    `;
+      <button class="add-to-cart" data-id="${ product.id }">
+        Add to Cart
+      </button>
+    `);
 		
-		// On product click, update URL hash to render 
-		// the corresponding about page & displays product info
-		productDivElement.onclick = () => {
-			location.hash = `#about/${ product.id }`;
-		};
+		// Using our custom hook to handle the product events
+		onProductContentClick(productDivElement, Number(product.id));
+		onAddToCartButtonClick(productDivElement, Number(product.id));
 		
 		productListDivElement.appendChild(productDivElement);
 	});
 	
-	fragment.appendChild(productListDivElement);
-	return fragment;
+	groupedDomNodesFragment.appendChild(productListDivElement);
+	return groupedDomNodesFragment;
 }
 ```
 
+##### Code Example - Custom Hooks
+
 ```ts
-// FILE: pages/products/products.ts
+// FILE: hooks/use-cart-data.ts
 // _______________________________________________
 
-import {
-	FooterComponent,
-	HeaderComponent,
-	NavbarComponent,
-	ProductsComponent,
-} from "../../components";
+import { ProductType } from "../types/types";
 
-export async function ProductsPage(): Promise<DocumentFragment> {
-	const fragment = new DocumentFragment();
+export type CartDataType = {
+	productData: ProductType;
+	bindGoBackButton: (divElement: HTMLDivElement) => void;
+	paypalIcon: string;
+	applePayIcon: string;
+};
+
+export function useCartData(): CartDataType {
+	const paypalIcon = "/assets/images/paypal.png";
+	const applePayIcon = "/assets/images/apple-pay.png";
 	
-	fragment.appendChild(NavbarComponent());
-	fragment.appendChild(HeaderComponent());
+	const defaultProduct: ProductType = {
+		title: 'No items in your cart',
+		price: 0.0,
+		image: '/assets/images/white_amz_cart.png',
+		category: '',
+		description: '',
+	};
 	
-	// Fetch men's clothing (Component is `async`)
-	const mensClothingDataFromComponent = await ProductsComponent("men's clothing");
-	fragment.appendChild(mensClothingDataFromComponent);
+	const bindGoBackButton = (divElement: HTMLDivElement) => {
+		const goBackButton = divElement.querySelector('.go-back') as HTMLButtonElement;
+		goBackButton.onclick = (event) => {
+			event.stopPropagation();
+			location.hash = `#products`;
+		};
+	};
 	
-	// Fetch women's clothing (Component is `async`)
-	const womensClothingDataFromComponent = await ProductsComponent("women's clothing");
-	fragment.appendChild(womensClothingDataFromComponent);
-	
-	fragment.appendChild(FooterComponent());
-	
-	return fragment;
+	return {
+		productData: defaultProduct,
+		bindGoBackButton,
+		paypalIcon,
+		applePayIcon,
+	};
 }
 ```
 
@@ -225,7 +327,7 @@ export function useFakeStoreApi() {
 	};
 }
 ```
-
+<img width="550" alt="home-page" src="public/assets/images/readme-images/about-default.png"> <img width="550" alt="home-page" src="public/assets/images/readme-images/about-detail.png">
 - **Modular Design**: The application is designed in a modular way, similar
   to the structure of projects developed with more complex frameworks. Each
   component, page, and hook is contained in its own module, allowing for
@@ -243,9 +345,14 @@ export function useFakeStoreApi() {
 │   ├── assets
 │   │   ├── fonts
 │   │   │   ├── Audiowide-Regular.ttf
+│   │   │   ├── Goldman-Bold.ttf
+│   │   │   ├── Goldman-Regular.ttf
 │   │   │   └── Gotham-ssm-medium.otf
 │   │   └── images
+│   │       ├── apple-pay.png
 │   │       ├── cart.png
+│   │       ├── paypal.png
+│   │       ├── shopping.jpg
 │   │       └── white_amz_cart.png
 │   └── vite.svg
 ├── src
@@ -255,11 +362,17 @@ export function useFakeStoreApi() {
 │   │   ├── about
 │   │   │   ├── about.css
 │   │   │   └── about.ts
+│   │   ├── cart
+│   │   │   ├── cart.css
+│   │   │   └── cart.ts
 │   │   ├── footer
 │   │   │   ├── footer.css
 │   │   │   └── footer.ts
 │   │   ├── header
 │   │   │   └── header.ts
+│   │   ├── home
+│   │   │   ├── home.css
+│   │   │   └── home.ts
 │   │   ├── index.ts
 │   │   ├── navbar
 │   │   │   ├── navbar.css
@@ -268,6 +381,10 @@ export function useFakeStoreApi() {
 │   │       ├── products.css
 │   │       └── products.ts
 │   ├── hooks
+│   │   ├── index.ts
+│   │   ├── use-cart-data.ts
+│   │   ├── use-nav-active-tab.ts
+│   │   └── use-products-events.ts
 │   ├── main.ts
 │   ├── pages
 │   │   ├── about
@@ -289,7 +406,7 @@ export function useFakeStoreApi() {
 │   └── vite-env.d.ts
 └── tsconfig.json
 
-22 directories, 32 files
+24 directories, 45 files
 ```
 
 - **State Management**: State management in this application is handled
@@ -303,11 +420,18 @@ export function useFakeStoreApi() {
 // FILE: components/about/about.ts
 // _______________________________________________
 
+import { useAboutEvents } from "../../hooks";
 import { useFakeStoreApi } from "../../api/use-fake-store-api";
 import './about.css';
 
 export async function AboutComponent(productId?: string): Promise<DocumentFragment> {
-	const fragment = new DocumentFragment();
+	const {
+		onProductContentClick,
+		onAddToCartClick,
+		onGoBackClick,
+	} = useAboutEvents();
+	
+	const groupedDomNodesFragment = new DocumentFragment();
 	const aboutInfoDivElement = document.createElement('div');
 	
 	if (productId) {
@@ -317,34 +441,42 @@ export async function AboutComponent(productId?: string): Promise<DocumentFragme
 		const productDivElement = document.createElement('div');
 		productDivElement.classList.add('about-product');
 		
-		productDivElement.innerHTML = `
-      <h1>${ productData.title }</h1>
-      <img src="${ productData.image }" alt="${ productData.title }" />
-      <p class="description">${ productData.description }</p>
-      <p class="product-price">$${ productData.price.toFixed(2) }</p>
-      <button>Add to Cart</button>
-    `;
+		productDivElement.innerHTML = (`
+			<div class="product-content" data-id="${ productData.id }">
+				<h1>${ productData.title }</h1>
+				<img src="${ productData.image }" alt="${ productData.title }" />
+				<p class="description">${ productData.description }</p>
+				<p class="product-price">$${ productData.price.toFixed(2) }</p>
+				<button class="add-to-cart" data-id="${ productData.id }">Add to Cart</button>
+				<button class="go-back">Go Back to Products</button>
+			</div>
+		`);
 		
-		fragment.appendChild(productDivElement);
+		onProductContentClick(productDivElement, Number(productData.id));
+		onAddToCartClick(productDivElement, Number(productData.id));
+		onGoBackClick(productDivElement);
+		
+		groupedDomNodesFragment.appendChild(productDivElement);
 	}
 	
-	aboutInfoDivElement.innerHTML = productId ? '' : `
-  <div class="about-info">
-    <h1>About Uncle Jose's T-Shirt Site</h1>
-    <p class="about-description">Welcome to Uncle Jose's T-Shirt Site! Our story begins with a passion for unique,
-       handmade t-shirts. We believe in creating high-quality t-shirts that express individuality
-       and personal style. Each t-shirt is crafted with care and attention to detail. We're committed
-       to sustainable and ethical manufacturing practices, ensuring that our t-shirts not only look
-       good, but feel good to wear and are good for the environment. We're proud to be a small business
-       that values our customers and the communities we serve. Thank you for supporting Uncle Jose's T-Shirt Site!
-    </p>
-  </div>
-`;
+	aboutInfoDivElement.innerHTML = productId ? '' : (`
+		<div class="about-info">
+			<h1>About Uncle Jose's T-Shirt Site</h1>
+			<p class="about-description">Welcome to Uncle Jose's T-Shirt Site! Our story begins with a passion for unique,
+				handmade t-shirts. We believe in creating high-quality t-shirts that express individuality
+				and personal style. Each t-shirt is crafted with care and attention to detail. We're committed
+				to sustainable and ethical manufacturing practices, ensuring that our t-shirts not only look
+				good, but feel good to wear and are good for the environment. We're proud to be a small business
+				that values our customers and the communities we serve. Thank you for supporting Uncle Jose's T-Shirt Site!
+			</p>
+		</div>
+	`);
 	
-	fragment.appendChild(aboutInfoDivElement);
-	return fragment;
+	groupedDomNodesFragment.appendChild(aboutInfoDivElement);
+	return groupedDomNodesFragment;
 }
 ```
+
 ```ts
 // src/pages/about/about.ts
 // _______________________________________________
@@ -357,36 +489,40 @@ import {
 } from "../../components";
 
 export async function AboutPage(productId?: string): Promise<DocumentFragment> {
-	const fragment = new DocumentFragment();
+	const groupedDomNodesFragment = new DocumentFragment();
 	
-	fragment.appendChild(NavbarComponent());
-	fragment.appendChild(HeaderComponent());
+	groupedDomNodesFragment.appendChild(NavbarComponent());
+	groupedDomNodesFragment.appendChild(HeaderComponent());
 	
 	const mainElement = document.createElement('main');
 	const aboutProduct = await AboutComponent(productId);
 	mainElement.appendChild(aboutProduct);
 	
-	fragment.appendChild(mainElement);
-	fragment.appendChild(FooterComponent());
+	groupedDomNodesFragment.appendChild(mainElement);
+	groupedDomNodesFragment.appendChild(FooterComponent());
 	
-	return fragment;
+	return groupedDomNodesFragment;
 }
 ```
 
 ## Project Structure
 
 - `src`: Contains the TypeScript source code.
+    - `api`: Contains the service to fetch data from the Fake Store API.
     - `components`: Contains reusable UI components.
+    - `hooks`: Contains some custom hooks to abstract logic from
+      components.
     - `pages`: Contains the different views of the application.
     - `router`: Contains the custom router hook.
-    - `api`: Contains the service to fetch data from the Fake Store API.
     - `styles`: Contains the global CSS styles.
+    - `types`: Contains the custom types help us throughout the app.
 - `public`: Contains static assets such as images and fonts.
 
 ## Running the Project
 
 You can run the project locally using the Vite development server. First,
-install the dependencies using `npm install` `npm i` or `pnpm install` `pnpm i`, then run:
+install the dependencies using `npm install` `npm i`
+or `pnpm install` `pnpm i`, then run:
 
 ```zsh
 npm run dev

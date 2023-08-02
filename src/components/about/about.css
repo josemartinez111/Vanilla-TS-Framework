@@ -6,30 +6,30 @@
   flex-direction:   column;
   align-items:      center;
   justify-content:  center;
-  width:            50%;
+  width:            55%; /* Decreased width */
   background-color: aliceblue;
   border-radius:    8px;
-  padding:          20px;
+  padding:          10px; /* Increased padding */
   box-sizing:       border-box;
   text-align:       center;
-  margin:           0 auto 20px;
+  margin:           0 auto 10px; /* Increased margin */
 }
 
 .about-product h1 {
-  font-size:     24px;
-  margin-bottom: 10px;
+  font-size:     18px; /* Decreased font size */
+  margin-bottom: 10px; /* Increased margin */
 }
 
 .about-product img {
-  width:         60%;
-  height:        300px;
+  width:         50%;
+  height:        180px; /* Decreased height */
   object-fit:    contain;
   border-radius: 5px;
-  margin-bottom: 20px;
+  margin-bottom: 15px; /* Increased margin */
 }
 
 .about-product p {
-  margin-bottom: 20px;
+  margin-bottom: 15px; /* Increased margin */
 }
 
 .about-product p.description {
@@ -46,25 +46,40 @@
 }
 
 .about-info {
-  max-width: 800px;
-  margin: 0 auto;
+  max-width:        800px; /* Decreased max-width */
+  margin:           0 auto;
   background-color: aliceblue;
-  border-radius: 5px;
-  padding: 20px;
-  box-sizing: border-box;
-  text-align: center;
+  border-radius:    5px;
+  padding:          15px; /* Increased padding */
+  box-sizing:       border-box;
+  text-align:       center;
 }
 
 .about-description {
-  max-height: 300px; /* Increase this value if necessary */
-  overflow: hidden;
+  max-height:    180px; /* Decreased max-height */
+  overflow:      hidden;
   text-overflow: ellipsis;
 }
 
-button.go-back {
-  margin-top: 10px;
+/* Add this to your CSS file */
+
+.button-container {
+  display:         flex;
+  justify-content: space-between;
+  align-items:     stretch; /* This will make sure the buttons stretch to fill the container */
+  width:           100%;
+  margin-top:      20px; /* Increased margin-top for buttons */
 }
 
-
-
+.button-container button.about-button { /* New button class */
+  display:        block; /* This will allow the button to respect width and height */
+  width:          calc(50% - 10px); /* This will make sure buttons are the same width */
+  flex:           1 0 auto;
+  margin:         0 5px; /* Add space between buttons */
+  box-sizing:     border-box;
+  height:         50px; /* Increased height for buttons */
+  padding:        0; /* Reset padding */
+  line-height:    50px; /* Set line-height equal to height */
+  vertical-align: middle; /* Align text vertically */
+}
 /* ________________________________________ */

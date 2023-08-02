@@ -18,6 +18,9 @@ export type CartDataType = {
  * a function to bind the "Go Back" button, and the icons for payment options.
  */
 export function useCartData(): CartDataType {
+	const paypalIcon = "/assets/images/paypal.png";
+	const applePayIcon = "/assets/images/apple-pay.png";
+	
 	const defaultProduct: ProductType = {
 		title: 'No items in your cart',
 		price: 0.0,
@@ -25,9 +28,6 @@ export function useCartData(): CartDataType {
 		category: '',
 		description: '',
 	};
-	
-	const paypalIcon = "/assets/images/paypal.png";
-	const applePayIcon = "/assets/images/apple-pay.png";
 	
 	const bindGoBackButton = (divElement: HTMLDivElement) => {
 		const goBackButton = divElement.querySelector('.go-back') as HTMLButtonElement;

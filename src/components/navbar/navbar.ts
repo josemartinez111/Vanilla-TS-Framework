@@ -5,6 +5,12 @@ import './navbar.css';
 import { useNavActiveTab } from "../../hooks";
 
 export function NavbarComponent(): HTMLElement {
+	const {
+		markAsActive,
+		removeActive,
+		markHomeAsActive,
+	} = useNavActiveTab();
+	
 	const navbarNavElement = document.createElement('nav');
 	navbarNavElement.classList.add("navbar");
 	
@@ -17,10 +23,10 @@ export function NavbarComponent(): HTMLElement {
         <li class="nav-item">
           <a id="${ route }" class="nav-link" href="#${ route }">
             ${
-							route === 'cart'
-								? `<img src="/assets/images/white_amz_cart.png" alt="Cart">`
-								: capitalizedRoute
-						}
+				route === 'cart'
+					? `<img src="/assets/images/white_amz_cart.png" alt="Cart">`
+					: capitalizedRoute
+			}
           </a>
         </li>
       `);
@@ -36,9 +42,15 @@ export function NavbarComponent(): HTMLElement {
     </div>
   `);
 	
+	// Mark the home link as active by default
+	markHomeAsActive(navbarNavElement);
+	
 	// Using our custom hook to handle the
 	// active tab logic when the route changes
-	useNavActiveTab(navbarNavElement);
+	window.addEventListener('routechange', (event: CustomEvent) => {
+		removeActive(navbarNavElement);
+		markAsActive(navbarNavElement, event.detail);
+	});
 	
 	return navbarNavElement;
 }
