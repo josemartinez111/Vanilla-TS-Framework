@@ -13,8 +13,8 @@
   align-items:      center;
   justify-content:  center; /* Vertically center the elements */
   width:            100%;
-  background-color: #f9f9f9; /* A light background */
-  border-radius:    5px; /* Rounded corners */
+  background-color: aliceblue; /* A light background */
+  border-radius:    8px; /* Rounded corners */
   padding:          10px;
   box-sizing:       border-box;
   text-align:       center;

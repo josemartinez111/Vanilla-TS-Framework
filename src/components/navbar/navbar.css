@@ -14,8 +14,29 @@
   justify-content:  flex-end; /* Align items to the right */
 }
 
-.nav-item {
-  margin-left: 25px; /* Add space between links */
+.navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.unc {
+  color: white;
+  margin-left: 30px; /* adjust as needed */
+}
+
+.unc {
+  font-family: "Goldman Bold", serif;
+  font-size:   1.2rem;
+  color:       white;
+  rotate:      7deg;
+}
+
+.unc:hover {
+  color: #FF0072;
+  transition: 0.3s;
+  cursor: none;
 }
 
 .nav-link {
@@ -38,7 +59,7 @@
 .nav-link:hover {
   border:        1px solid white;
   border-radius: 4px;
-  color: #ff9900;
+  color: #FF0072;
 }
 
 .nav-link:active {

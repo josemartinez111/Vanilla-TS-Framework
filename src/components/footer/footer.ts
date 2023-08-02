@@ -10,7 +10,7 @@ export function FooterComponent(): HTMLElement {
 	const divContainerElement = document.createElement('div');
 	divContainerElement.classList.add("footer");
 	
-	divContainerElement.innerHTML = `
+	divContainerElement.innerHTML = (`
     <footer class="footer-content">
       <p>© 2023 <b>Uncle Jose's T-Shirt Site</b> |
         <a href="${ githubRepoURL }" class="footer-link" target="_blank">
@@ -19,7 +19,7 @@ export function FooterComponent(): HTMLElement {
         </a>
       </p>
     </footer>
-  `;
+  `);
 	
 	return divContainerElement;
 }

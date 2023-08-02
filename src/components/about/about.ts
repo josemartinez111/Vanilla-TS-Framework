@@ -5,7 +5,7 @@ import { useFakeStoreApi } from "../../api/use-fake-store-api";
 import './about.css';
 
 export async function AboutComponent(productId?: string): Promise<DocumentFragment> {
-	const fragment = new DocumentFragment();
+	const groupedDomNodesFragment = new DocumentFragment();
 	const aboutInfoDivElement = document.createElement('div');
 	
 	if (productId) {
@@ -15,18 +15,18 @@ export async function AboutComponent(productId?: string): Promise<DocumentFragme
 		const productDivElement = document.createElement('div');
 		productDivElement.classList.add('about-product');
 		
-		productDivElement.innerHTML = `
+		productDivElement.innerHTML = (`
       <h1>${ productData.title }</h1>
       <img src="${ productData.image }" alt="${ productData.title }" />
       <p class="description">${ productData.description }</p>
       <p class="product-price">$${ productData.price.toFixed(2) }</p>
       <button>Add to Cart</button>
-    `;
+    `);
 		
-		fragment.appendChild(productDivElement);
+		groupedDomNodesFragment.appendChild(productDivElement);
 	}
 	
-	aboutInfoDivElement.innerHTML = productId ? '' : `
+	aboutInfoDivElement.innerHTML = productId ? '' : (`
   <div class="about-info">
     <h1>About Uncle Jose's T-Shirt Site</h1>
     <p class="about-description">Welcome to Uncle Jose's T-Shirt Site! Our story begins with a passion for unique,
@@ -37,8 +37,8 @@ export async function AboutComponent(productId?: string): Promise<DocumentFragme
        that values our customers and the communities we serve. Thank you for supporting Uncle Jose's T-Shirt Site!
     </p>
   </div>
-`;
+`);
 	
-	fragment.appendChild(aboutInfoDivElement);
-	return fragment;
+	groupedDomNodesFragment.appendChild(aboutInfoDivElement);
+	return groupedDomNodesFragment;
 }

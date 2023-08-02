@@ -1,23 +1,15 @@
 // FILE: pages/home/home.ts
 // _______________________________________________
 
-import { FooterComponent, HeaderComponent, NavbarComponent } from "../../components";
+import { FooterComponent, HeaderComponent, NavbarComponent, HomeComponent } from "../../components";
 
 export function HomePage(): DocumentFragment {
-	const fragment = new DocumentFragment();
+	const groupedDomNodesFragment = new DocumentFragment();
 	
-	fragment.appendChild(NavbarComponent());
-	fragment.appendChild(HeaderComponent());
+	groupedDomNodesFragment.appendChild(NavbarComponent());
+	groupedDomNodesFragment.appendChild(HeaderComponent());
+	groupedDomNodesFragment.appendChild(HomeComponent());
+	groupedDomNodesFragment.appendChild(FooterComponent());
 	
-	const mainElement = document.createElement('main');
-	
-	mainElement.innerHTML = `
-		<h1>Welcome to Uncle Jose's T-Shirt Site!</h1>
-    <p>Discover our unique, handmade t-shirts.</p>
-	`;
-	
-	fragment.appendChild(mainElement);
-	fragment.appendChild(FooterComponent());
-	
-	return fragment;
+	return groupedDomNodesFragment;
 }

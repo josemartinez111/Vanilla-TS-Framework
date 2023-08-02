@@ -9,20 +9,20 @@ import {
 } from "../../components";
 
 export async function ProductsPage(): Promise<DocumentFragment> {
-	const fragment = new DocumentFragment();
+	const groupedDomNodesFragment = new DocumentFragment();
 	
-	fragment.appendChild(NavbarComponent());
-	fragment.appendChild(HeaderComponent());
+	groupedDomNodesFragment.appendChild(NavbarComponent());
+	groupedDomNodesFragment.appendChild(HeaderComponent());
 	
 	// Fetch men's clothing (Component is `async`)
 	const mensClothingDataFromComponent = await ProductsComponent("men's clothing");
-	fragment.appendChild(mensClothingDataFromComponent);
+	groupedDomNodesFragment.appendChild(mensClothingDataFromComponent);
 	
 	// Fetch women's clothing (Component is `async`)
 	const womensClothingDataFromComponent = await ProductsComponent("women's clothing");
-	fragment.appendChild(womensClothingDataFromComponent);
+	groupedDomNodesFragment.appendChild(womensClothingDataFromComponent);
 	
-	fragment.appendChild(FooterComponent());
+	groupedDomNodesFragment.appendChild(FooterComponent());
 	
-	return fragment;
+	return groupedDomNodesFragment;
 }

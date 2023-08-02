@@ -9,17 +9,17 @@ import {
 } from "../../components";
 
 export async function AboutPage(productId?: string): Promise<DocumentFragment> {
-	const fragment = new DocumentFragment();
+	const groupedDomNodesFragment = new DocumentFragment();
 	
-	fragment.appendChild(NavbarComponent());
-	fragment.appendChild(HeaderComponent());
+	groupedDomNodesFragment.appendChild(NavbarComponent());
+	groupedDomNodesFragment.appendChild(HeaderComponent());
 	
 	const mainElement = document.createElement('main');
 	const aboutProduct = await AboutComponent(productId);
 	mainElement.appendChild(aboutProduct);
 	
-	fragment.appendChild(mainElement);
-	fragment.appendChild(FooterComponent());
+	groupedDomNodesFragment.appendChild(mainElement);
+	groupedDomNodesFragment.appendChild(FooterComponent());
 	
-	return fragment;
+	return groupedDomNodesFragment;
 }
