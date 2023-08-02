@@ -2,29 +2,26 @@
 // _______________________________________________
 
 import { ProductType } from "../../types/types";
+import { useCartData } from '../../hooks/use-cart-data';
 import './cart.css';
 
 export function CartComponent(product?: ProductType): DocumentFragment {
-	const groupedDomNodesFragment = new DocumentFragment();
+	const {
+		productData: defaultProductData,
+		bindGoBackButton,
+		paypalIcon,
+		applePayIcon,
+	} = useCartData();
 	
-	const paypalIcon = "/assets/images/paypal.png";
-	const applePayIcon = "/assets/images/apple-pay.png";
-	
-	// Default product data
-	const defaultProduct = {
-		title: 'No items in your cart',
-		price: 0.0,
-		image: '/assets/images/white_amz_cart.png', // replace this with your own empty cart image
-	};
-	
-	// Use the provided product data if available, otherwise use the default product data
-	const productData = product || defaultProduct;
+	const productData = product || defaultProductData;
 	
 	const divElement = document.createElement('div');
 	divElement.innerHTML = (`
     <div class="cart-container">
       <div class="cart-side cart-item">
-        <img class="cart-image ${product ? '' : 'default-image'}" src="${ productData.image }" alt="${ productData.title }" />
+        <img class="cart-image ${ product
+		? ''
+		: 'default-image' }" src="${ productData.image }" alt="${ productData.title }" />
         <div class="cart-title">${ productData.title }</div>
         <div class="cart-price">$${ productData.price.toFixed(2) }</div>
         <div class="pay-option">
@@ -55,12 +52,9 @@ export function CartComponent(product?: ProductType): DocumentFragment {
     </div>
   `);
 	
-	const goBackButton = divElement.querySelector('.go-back') as HTMLButtonElement;
-	goBackButton.onclick = (event) => {
-		event.stopPropagation();
-		location.hash = `#products`;
-	};
+	bindGoBackButton(divElement);
 	
+	const groupedDomNodesFragment = document.createDocumentFragment();
 	while (divElement.firstChild) {
 		groupedDomNodesFragment.appendChild(divElement.firstChild);
 	}

@@ -8,29 +8,33 @@ type RouteChangeType = {
 }
 
 export function useRouter(rootElement: HTMLElement): RouteChangeType {
-	// make this function async
 	const useRouteChange = async (): Promise<void> => {
-		// clear the root element content
 		rootElement.innerHTML = '';
-		// used for when selecting a product & then it opens in the about page
-		const [routeName, productId] = location.hash.split('/');
+		
+		let [routeName, productId] = location.hash.split('/');
+		// remove the '#' from routeName
+		routeName = routeName.replace('#', '');
 		
 		switch (routeName) {
-			case '#home':
+			case 'home':
 				rootElement.appendChild(HomePage());
 				break;
-			case '#about':
+			case 'about':
 				rootElement.appendChild(await AboutPage(productId));
 				break;
-			case '#products':
+			case 'products':
 				rootElement.appendChild(await ProductsPage());
 				break;
-			case '#cart':
+			case 'cart':
 				rootElement.appendChild(await CartPage(productId));
 				break;
 			default:
 				location.hash = 'home';
+				routeName = 'home';
 		}
+		
+		// Dispatch a custom event with the new route name
+		window.dispatchEvent(new CustomEvent('routechange', { detail: routeName }));
 	};
 	
 	return {
