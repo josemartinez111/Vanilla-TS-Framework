@@ -1,0 +1,122 @@
+/* FILE: components/cart/cart.css */
+
+.cart-container {
+  display:         flex;
+  justify-content: space-between;
+  padding:         20px;
+}
+
+.cart-side {
+  flex:             1;
+  margin:           20px;
+  padding:          20px;
+  border-radius:    8px;
+  background-color: aliceblue;
+}
+
+.cart-item {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+}
+
+.cart-item img {
+  width:         10%;
+  height:        auto;
+  object-fit:    contain;
+  margin-bottom: 20px;
+}
+
+.pay-form {
+  display:        flex;
+  flex-direction: column;
+}
+
+.pay-form input {
+  padding:       10px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border:        1px solid #ccc;
+}
+
+.btn {
+  font-size:       18px;
+  letter-spacing:  2px;
+  text-transform:  uppercase;
+  display:         inline-block;
+  text-align:      center;
+  font-weight:     bold;
+  padding:         0.4em 2em;
+  cursor:          pointer;
+  border:          3px solid #03DBF8;
+  border-radius:   15px;
+  position:        relative;
+  box-shadow:      0 2px 10px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.1);
+  color:           #03DBF8;
+  text-decoration: none;
+  transition:      0.3s ease all;
+  z-index:         1;
+}
+
+.btn:before {
+  transition:       0.5s all ease;
+  position:         absolute;
+  top:              0;
+  left:             50%;
+  right:            50%;
+  bottom:           0;
+  opacity:          0;
+  content:          "";
+  background-color: #03DBF8;
+  z-index:          -1;
+}
+
+.btn:hover, .btn:focus {
+  color: white;
+}
+
+.btn:hover:before, .btn:focus:before {
+  transition:    0.5s all ease;
+  left:          0;
+  right:         0;
+  opacity:       1;
+  border-radius: 9px;
+}
+
+.pay-now {
+  border-radius: 0;
+}
+
+.btn:hover:before, .btn:focus:before {
+  border-radius: 0;
+}
+
+.btn:active {
+  transform:     scale(0.9);
+  border-radius: 12px;
+}
+
+.btn-icon {
+  width:         60%;
+  padding-top:    0;
+  padding-bottom: 0;
+}
+
+.pay-option {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  margin-top:      10px;
+  margin-bottom:   20px;
+  margin-left: 170px;
+  
+}
+
+.pay-option img {
+  margin-left: 90px;
+  margin-top: 20px;
+  width: 20%;
+  display: block;
+  object-fit: fill;
+}
+

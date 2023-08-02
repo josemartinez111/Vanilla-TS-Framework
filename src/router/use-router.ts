@@ -26,7 +26,7 @@ export function useRouter(rootElement: HTMLElement): RouteChangeType {
 				rootElement.appendChild(await ProductsPage());
 				break;
 			case '#cart':
-				rootElement.appendChild(CartPage());
+				rootElement.appendChild(await CartPage(productId));
 				break;
 			default:
 				location.hash = 'home';
