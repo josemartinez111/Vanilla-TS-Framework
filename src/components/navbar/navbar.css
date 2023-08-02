@@ -12,7 +12,7 @@
   box-sizing:       border-box;
   display:          flex; /* Use flexbox to align items */
   justify-content:  flex-end; /* Align items to the right */
-  z-index: 1000;
+  z-index:          1000;
 }
 
 .navbar-content {
@@ -57,7 +57,7 @@
   justify-content: space-between; /* Distribute space evenly between links */
 }
 
-.nav-link:hover {
+.nav-link:hover, .nav-link.active {
   border:        1px solid white;
   border-radius: 4px;
   color:         #FF0072;
@@ -82,4 +82,3 @@
   height: auto;
   width:  20px; /* Adjust as needed */
 }
-

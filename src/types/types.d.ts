@@ -2,7 +2,7 @@
 // _______________________________________________
 
 export type ProductType = {
-	id: number;
+	id?: number;
 	title: string;
 	price: number;
 	category: string;

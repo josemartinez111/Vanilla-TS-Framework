@@ -1,6 +1,7 @@
 // FILE: components/products/products.ts
 // _______________________________________________
 
+import { useProductEvents } from "../../hooks";
 import { ProductType } from "../../types/types";
 import { useFakeStoreApi } from "../../api/use-fake-store-api";
 import './products.css';
@@ -31,19 +32,9 @@ export async function ProductsComponent(category: string, limit: number = 24): P
 			</button>
 		`);
 		
-		// sends the user to the `about` page when the product content is clicked
-		const productContent = productDivElement.querySelector('.product-content') as HTMLButtonElement;
-		productContent.onclick = () => {
-			location.hash = `#about/${ product.id }`;
-		};
-		
-		// sends the user to the `cart` page when the `Add to Cart` button is clicked
-		const addToCartButton = productDivElement.querySelector('.add-to-cart') as HTMLButtonElement;
-		addToCartButton.onclick = (event) => {
-			event.stopPropagation();
-			location.hash = `#cart/${ product.id }`;
-		};
-		
+		// Using our custom hook to handle the product events
+		// (clicking the product content and the 'Add to Cart' button)
+		useProductEvents(productDivElement, product.id);
 		productListDivElement.appendChild(productDivElement);
 	});
 	

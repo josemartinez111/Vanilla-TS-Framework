@@ -2,6 +2,7 @@
 // _______________________________________________
 
 import './navbar.css';
+import { useNavActiveTab } from "../../hooks";
 
 export function NavbarComponent(): HTMLElement {
 	const navbarNavElement = document.createElement('nav');
@@ -11,15 +12,15 @@ export function NavbarComponent(): HTMLElement {
 	
 	const listItems = routes
 		.map((route: string) => {
-			const capitalizedRoute = `${ route[0].toUpperCase() }${ route.substring(1) }`;
+			const capitalizedRoute = `${ route[ 0 ].toUpperCase() }${ route.substring(1) }`;
 			return (`
         <li class="nav-item">
-          <a class="nav-link" href="#${ route }">
+          <a id="${ route }" class="nav-link" href="#${ route }">
             ${
 							route === 'cart'
 								? `<img src="/assets/images/white_amz_cart.png" alt="Cart">`
 								: capitalizedRoute
-			       }
+						}
           </a>
         </li>
       `);
@@ -35,6 +36,9 @@ export function NavbarComponent(): HTMLElement {
     </div>
   `);
 	
+	// Using our custom hook to handle the
+	// active tab logic when the route changes
+	useNavActiveTab(navbarNavElement);
+	
 	return navbarNavElement;
 }
-
