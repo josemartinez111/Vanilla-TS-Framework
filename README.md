@@ -528,3 +528,8 @@ or `pnpm install` `pnpm i`, then run:
 npm run dev
 # OR
 pnpm run dev
+```
+___
+## You can find the deployed version here: 
+### [LINK TO WEBSITE: Uncle Jose's T-Shirt Site](https://t-shirt-site.000webhostapp.com)
+

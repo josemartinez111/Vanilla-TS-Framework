@@ -19,7 +19,7 @@ export function useNavActiveTab(): ActiveTabTypes {
 	};
 	
 	const markHomeAsActive = (navElement: HTMLElement): void => {
-		navElement.querySelector('#home').classList.add('active');
+		navElement.querySelector('#home')?.classList.add('active');
 	};
 	
 	return {

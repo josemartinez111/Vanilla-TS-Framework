@@ -40,6 +40,10 @@
   overflow:           hidden;
 }
 
+p.description {
+  font-family: "Goldman Regular", serif;
+}
+
 .about-product .product-price {
   font-family: "Audiowide", serif;
   color:       black;
@@ -56,6 +60,7 @@
 }
 
 .about-description {
+  font-family:   "Goldman Regular", serif;
   max-height:    180px; /* Decreased max-height */
   overflow:      hidden;
   text-overflow: ellipsis;
@@ -82,4 +87,5 @@
   line-height:    50px; /* Set line-height equal to height */
   vertical-align: middle; /* Align text vertically */
 }
+
 /* ________________________________________ */
