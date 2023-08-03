@@ -47,9 +47,10 @@ export function NavbarComponent(): HTMLElement {
 	
 	// Using our custom hook to handle the
 	// active tab logic when the route changes
-	window.addEventListener('routechange', (event: CustomEvent) => {
+	window.addEventListener('routechange', (event) => {
+		const customEvent = event as CustomEvent;
 		removeActive(navbarNavElement);
-		markAsActive(navbarNavElement, event.detail);
+		markAsActive(navbarNavElement, customEvent?.detail);
 	});
 	
 	return navbarNavElement;
