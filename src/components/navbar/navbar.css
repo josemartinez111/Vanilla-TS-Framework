@@ -23,14 +23,14 @@
 }
 
 .unc {
-  color:       white;
+  color:       #ffffff;
   margin-left: 30px; /* adjust as needed */
 }
 
 .unc {
   font-family: "Goldman Bold", serif;
   font-size:   1.2rem;
-  color:       white;
+  color:       #ffffff;
   rotate:      7deg;
 }
 
@@ -42,7 +42,7 @@
 
 .nav-link {
   display:         block;
-  color:           white;
+  color:           #ffffff;
   text-align:      center;
   padding:         7px 16px;
   text-decoration: none;
@@ -58,7 +58,7 @@
 }
 
 .nav-link:hover, .nav-link.active {
-  border:        1px solid white;
+  border:        1px solid #ffffff;
   border-radius: 4px;
   color:         #FF0072;
 }
@@ -68,7 +68,7 @@
 }
 
 .nav-item:last-child .nav-link:hover {
-  border:        1px solid white;
+  border:        1px solid  #ffffff;
   border-radius: 4px; /* Use the same border radius as the link */
 }
 

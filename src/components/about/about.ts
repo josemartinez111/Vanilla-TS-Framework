@@ -16,8 +16,8 @@ export async function AboutComponent(productId?: string): Promise<DocumentFragme
 	const aboutInfoDivElement = document.createElement('div');
 	
 	if (productId) {
-		const { getSingleProduct } = useFakeStoreApi();
-		const productData = await getSingleProduct(Number(productId));
+		const { fetchSingleProduct } = useFakeStoreApi();
+		const productData = await fetchSingleProduct(Number(productId));
 		
 		const productDivElement = document.createElement('div');
 		productDivElement.classList.add('about-product');
@@ -29,10 +29,10 @@ export async function AboutComponent(productId?: string): Promise<DocumentFragme
 		    <p class="description">${ productData.description }</p>
 		    <p class="product-price">$${ productData.price.toFixed(2) }</p>
 		    <div class="button-container">  <!-- New button container -->
-		      <button class="btn1 about-button add-to-cart" data-id="${ productData.id }">
+		      <button class="btn1 about-button add-to-cart add-to-cart-button" data-id="${ productData.id }">
 		       Add to Cart
 		      </button>
-		      <button class="btn2 about-button go-back">
+		      <button class="btn2 about-button go-back add-to-cart-button">
 		       Go Back to Products
 		      </button>
 		    </div>

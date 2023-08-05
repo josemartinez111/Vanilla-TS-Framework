@@ -11,10 +11,10 @@ import './products.css';
 
 export async function ProductsComponent(category: string, limit: number = 24): Promise<DocumentFragment> {
 	const { onProductContentClick, onAddToCartButtonClick } = useProductEvents();
-	const { getProductsInCategory } = useFakeStoreApi();
+	const { fetchProductsByCategory } = useFakeStoreApi();
 	
 	// fetching the data from the API based on the category and limit of items
-	const productData = await getProductsInCategory(category, limit);
+	const productData = await fetchProductsByCategory(category, limit);
 	// creating a DocumentFragment to group the DOM nodes
 	const groupedDomNodesFragment = new DocumentFragment();
 	
@@ -33,7 +33,7 @@ export async function ProductsComponent(category: string, limit: number = 24): P
         </div>
         <p class="product-price">$${ product.price.toFixed(2) }</p>
       </div>
-      <button class="add-to-cart" data-id="${ product.id }">
+      <button class="add-to-cart add-to-cart-button" data-id="${ product.id }">
         Add to Cart
       </button>
     `);

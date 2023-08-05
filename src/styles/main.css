@@ -103,7 +103,7 @@ button:before {
 }
 
 button:hover, button:focus {
-  color: white;
+  color: #ffffff;
 }
 
 button:hover:before, button:focus:before {
@@ -115,5 +115,9 @@ button:hover:before, button:focus:before {
 
 button:active {
   transform: scale(0.9);
+}
+
+button.add-to-cart-button, .remove-from-cart-button {
+  background-color: #ffffff !important;
 }
 /* ________________________________________ */

@@ -11,3 +11,4 @@ export type ProductType = {
 }
 
 export type ProductListType = Array<ProductType>;
+// _______________________________________________
