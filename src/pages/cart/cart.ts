@@ -20,11 +20,12 @@ export async function CartPage(productId?: string): Promise<DocumentFragment> {
 	
 	// If a productId was provided, fetch the product and display it in the cart
 	if (productId) {
-		const { getSingleProduct } = useFakeStoreApi();
-		productData = await getSingleProduct(Number(productId));
+		const { fetchSingleProduct } = useFakeStoreApi();
+		productData = await fetchSingleProduct(Number(productId));
 	}
 	
-	const cartComponent = CartComponent(productData);
+	// Await the asynchronous result of CartComponent
+	const cartComponent = await CartComponent(productData);
 	mainElement.appendChild(cartComponent);
 	
 	groupedDomNodesFragment.appendChild(mainElement);

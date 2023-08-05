@@ -1,27 +1,27 @@
 /* FILE: components/footer/footer.css */
 
 .footer {
-  list-style-type: none;
-  padding: 10px 30px;
+  list-style-type:  none;
+  padding:          10px 30px;
   background-color: #0f1111;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  height: 80px; /* Set a fixed height for the footer */
-  z-index: 1000;
+  position:         fixed;
+  bottom:           0;
+  left:             0;
+  width:            100%;
+  box-sizing:       border-box;
+  display:          flex;
+  align-items:      center;
+  justify-content:  center;
+  color:            #ffffff;
+  height:           80px; /* Set a fixed height for the footer */
+  z-index:          1000;
 }
 
 .footer-content {
-  display: flex; /* Use flexbox to align items */
-  align-items: center; /* Center items horizontally */
+  display:         flex; /* Use flexbox to align items */
+  align-items:     center; /* Center items horizontally */
   justify-content: center; /* Center items vertically */
-  width: 100%; /* Use the full width of the parent */
+  width:           100%; /* Use the full width of the parent */
 }
 
 .footer p {
@@ -29,7 +29,7 @@
 }
 
 .footer-link {
-  color: white;
+  color:            #ffffff;
   text-decoration: none;
 }
 
@@ -38,7 +38,7 @@
 }
 
 .github {
-  width: 20px;
-  border-radius: 50%;
+  width:          20px;
+  border-radius:  50%;
   vertical-align: middle;
 }

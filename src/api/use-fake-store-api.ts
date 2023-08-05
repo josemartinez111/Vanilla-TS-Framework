@@ -4,25 +4,48 @@
 import { ProductListType, ProductType } from "../types/types";
 
 export function useFakeStoreApi() {
-	const getAllProducts = async (): Promise<ProductListType> => {
+	const fetchAllProducts = async (): Promise<ProductListType> => {
 		const response = await fetch('https://fakestoreapi.com/products');
 		const products = await (response.json()) as ProductListType;
 		return products;
 	};
 	
-	const getSingleProduct = async (id: number): Promise<ProductType> => {
-		const response = await fetch(`https://fakestoreapi.com/products/${ id }`);
-		const product = await (response.json()) as ProductType;
-		return product;
+	const fetchSingleProduct = async (id: number): Promise<ProductType> => {
+		// Logging the ID of the product, we're about to fetch
+		console.log("Fetching product with ID:", id);
+		
+		try {
+			// Fetching the product from the API
+			const response = await fetch(`https://fakestoreapi.com/products/${ id }`);
+			// If the response is not OK (status is not 200-299), throw an error
+			if (!response.ok) throw new Error(`HTTP error! status: ${ response.status }`);
+			
+			// Parsing the response as JSON
+			const product = await (response.json()) as ProductType;
+			// Logging the product that was fetched
+			console.log("Fetched product:", product);
+			
+			// If the product is undefined or null, throw an error
+			if (!product) throw new Error(`No product found with ID: ${ id }`);
+			
+			// Returning the product as ProductType
+			return product as ProductType;
+		} catch (error: unknown) {
+			// If the error is an instance of Error, log it
+			if (error instanceof Error) console.error('Error-fetching product:', error);
+			// Re-throwing the error
+			throw error;
+		}
 	};
 	
-	const getLimitedProducts = async (limit: number = 5): Promise<ProductListType> => {
+	
+	const fetchLimitedProducts = async (limit: number = 5): Promise<ProductListType> => {
 		const response = await fetch(`https://fakestoreapi.com/products?limit=${ limit }`);
 		const products = await (response.json()) as ProductListType;
 		return products;
 	};
 	
-	const getProductsInCategory = async (category: string, limit: number = 20): Promise<ProductListType> => {
+	const fetchProductsByCategory = async (category: string, limit: number = 20): Promise<ProductListType> => {
 		const response = await fetch(`https://fakestoreapi.com/products/category/${ category }?limit=${ limit }`);
 		const products = await response.json() as ProductListType;
 		
@@ -44,25 +67,37 @@ export function useFakeStoreApi() {
 	};
 	
 	
-	const getSortedProducts = async (order: 'asc' | 'desc'): Promise<ProductListType> => {
+	const fetchSortedProducts = async (order: 'asc' | 'desc'): Promise<ProductListType> => {
 		const response = await fetch(`https://fakestoreapi.com/products?sort=${ order }`);
 		const products = await (response.json()) as ProductListType;
 		return products;
 	};
 	
-	const getAllCategories = async (): Promise<Array<string>> => {
+	const fetchAllCategories = async (): Promise<Array<string>> => {
 		const response = await fetch('https://fakestoreapi.com/products/categories');
 		const categories = await (response.json()) as Array<string>;
 		return categories;
 	};
 	
+	// LOCAL STORAGE API FUNCTIONS
+	const fetchAllCartItems = async (): Promise<ProductListType> => {
+		// Fetch the cartItems from localStorage
+		const cartItems: string | null = localStorage.getItem('cartItems');
+		
+		// Parse the cartItems and return them
+		return cartItems
+			? JSON.parse(cartItems)
+			: [] as ProductListType;
+	};
+	
 	return {
-		getAllProducts,
-		getSingleProduct,
-		getLimitedProducts,
-		getSortedProducts,
-		getAllCategories,
-		getProductsInCategory,
+		fetchAllProducts,
+		fetchSingleProduct,
+		fetchLimitedProducts,
+		fetchSortedProducts,
+		fetchAllCategories,
+		fetchProductsByCategory,
+		fetchAllCartItems,
 	};
 }
 
