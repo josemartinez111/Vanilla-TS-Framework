@@ -41,7 +41,7 @@ export async function AboutComponent(productId?: string): Promise<DocumentFragme
 		
 		
 		onProductContentClick(productDivElement, Number(productData.id));
-		onAddToCartClick(productDivElement, Number(productData.id));
+		onAddToCartClick(productDivElement, productData);
 		onGoBackClick(productDivElement);
 		
 		groupedDomNodesFragment.appendChild(productDivElement);

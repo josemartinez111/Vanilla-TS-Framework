@@ -1,11 +1,12 @@
 // FILE: hooks/use-about-events.ts
 // _______________________________________________
 
+import { ProductType } from "../types/types";
 import { useLocalStorage } from "../hooks/use-local-storage.ts";
 
 type AboutEventHandlersType = {
 	onProductContentClick: (divElement: HTMLDivElement, itemID: number) => void;
-	onAddToCartClick: (divElement: HTMLDivElement, itemID: number) => void;
+	onAddToCartClick: (divElement: HTMLDivElement, item: ProductType) => void;
 	onGoBackClick: (divElement: HTMLDivElement) => void;
 };
 
@@ -20,7 +21,7 @@ export function useAboutEvents(): AboutEventHandlersType {
 		};
 	};
 	
-	const onAddToCartClick = (divElement: HTMLDivElement, itemID: number) => {
+	const onAddToCartClick = (divElement: HTMLDivElement, item: ProductType) => {
 		const addToCartButton = divElement.querySelector('.add-to-cart') as HTMLButtonElement;
 		
 		// Sends the user to the `cart` page when the `Add to Cart` button is clicked
@@ -30,9 +31,9 @@ export function useAboutEvents(): AboutEventHandlersType {
 			event.stopPropagation();
 			
 			// Adds the item to the cart
-			localeStorageSetItem(itemID);
+			localeStorageSetItem(item);
 			// Changes the URL hash to navigate to the cart page with the added item
-			location.hash = `#cart/${ itemID }`;
+			location.hash = `#cart/${ item.id }`;
 		};
 	};
 	
