@@ -120,4 +120,17 @@ button:active {
 button.add-to-cart-button, .remove-from-cart-button {
   background-color: #ffffff !important;
 }
+
+/* Media queries for smaller screens */
+@media (max-width: 768px) {
+  body {
+    padding-top:    75px;
+    padding-bottom: 40px;
+  }
+  
+  button {
+    font-size: 14px;
+    padding: 0.5em 1em;
+  }
+}
 /* ________________________________________ */

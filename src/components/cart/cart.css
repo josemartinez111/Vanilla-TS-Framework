@@ -26,6 +26,7 @@
   height:        auto;
   object-fit:    contain;
   margin-bottom: 20px;
+  border-radius: 12px;
 }
 
 .pay-option {
@@ -142,13 +143,13 @@ button.go-back {
 }
 
 .text {
-  font-family: "Goldman Bold", serif;
-  font-size:   1.2rem;
-  color:       #0f1111;
+  font-family:   "Goldman Bold", serif;
+  font-size:     1.2rem;
+  color:         #0f1111;
   /* rotate:      8deg; */
-  border:      3px solid #03DBF8;
+  border:        3px solid #03DBF8;
   border-radius: 12px;
-  padding:     12px;
+  padding:       12px;
 }
 
 .text:hover {
@@ -161,6 +162,62 @@ button.go-back {
   width: 100%;
 }
 
+/* Media queries for smaller screens */
+@media (max-width: 768px) {
+  .cart-container {
+    flex-direction: column;
+    gap:            10px;
+  }
+  
+  .cart-side {
+    width:   95%;
+    padding: 10px;
+  }
+  
+  .cart-item img {
+    width: 70%;
+  }
+  
+  .btn-icon {
+    width: 180%; /* Adjust the icon size here */
+    /* padding-right: 100px; */
+  }
+  
+  .pay-option {
+    flex-direction: column;
+    width: 40%;
+    /* gap:            5px; */
+    margin-left:    0;
+  }
+  
+  .pay-form label, .pay-form input {
+    width:  100%;
+    margin: 0;
+  }
+  
+  .btn {
+    font-size:    10px; /* Smaller font size for buttons */
+    padding:      0.2em 1em;
+    border-width: 1px; /* Smaller border for buttons */
+  }
+  
+  .text {
+    font-size: 0.7rem; /* Smaller font size for text */
+    padding:   6px; /* Smaller padding for text */
+  }
+  
+  .cart-input {
+    padding: 5px; /* Smaller padding for input fields */
+  }
+  
+  .cart-input-label {
+    font-size: 0.8rem; /* Smaller font size for labels */
+  }
+  
+  .cart-item img {
+    width: 10%;
+  }
+}
 /* div.cart-side.pay-form { */
 /*   padding-top: 110px; */
 /* } */

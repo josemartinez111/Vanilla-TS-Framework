@@ -4,11 +4,9 @@ This project, masterminded by me `Jose Martinez`, serves as an `e-commerce` `Sin
 `(SPA)`, meticulously crafted using pure TypeScript, HTML, and CSS. The repository branch
 `dev/module6` particularly demonstrates the use of the `Document Object Model` `(DOM)` to dynamically
 create `elements`, `fragments`, and `classes`, thereby simulating a `shopping cart` experience, as well
-as showcasing a list of `clothing items`, an `about page`, and a `product's page`. In contrast, the main 
-branch of the project has evolved to utilize a `run-time` to incorporate `JSX` syntax, all without 
-leaning on any specific libraries such as `React`, `SolidJS`, or `The Qwik Framework`. This project 
+as showcasing a list of `clothing items`, an `about page`, and a `product's page`. This project 
 shines a light on the fundamental web development concepts that are often abstracted away by 
-these libraries and frameworks, offering a unique perspective on the underlying mechanics of web development.
+libraries and frameworks, offering a unique perspective on the underlying mechanics of web development.
 It also fetches from the `fake store API` to display a list of `products`.
 
 <img width="750" alt="home-page" src="public/assets/images/readme-images/home-page.png">
