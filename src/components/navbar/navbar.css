@@ -1,5 +1,5 @@
 /* FILE: components/navbar/navbar.css */
-
+/* ------------------------------------------------ */
 .navbar {
   list-style-type:  none;
   padding:          10px 30px;
@@ -68,7 +68,7 @@
 }
 
 .nav-item:last-child .nav-link:hover {
-  border:        1px solid  #ffffff;
+  border:        1px solid #ffffff;
   border-radius: 4px; /* Use the same border radius as the link */
 }
 
@@ -82,3 +82,35 @@
   height: auto;
   width:  20px; /* Adjust as needed */
 }
+
+/* Media queries for smaller screens */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 10px 20px; /* Increase padding for more space */
+  }
+  
+  .navbar-content {
+    flex-direction: column; /* Stack items vertically if needed */
+    gap:            10px; /* Add space between items */
+  }
+  
+  .unc {
+    font-size: 0.5rem; /* Further reduce font size */
+    margin-top: 10px;
+  }
+  
+  .nav-link {
+    padding:   10px 20px; /* Increase padding for more space */
+    font-size: 0.7em; /* Further reduce font size */
+  }
+  
+  .nav-item:last-child .nav-link img {
+    width: 20px; /* Reduce logo size */
+  }
+  
+  .nav-link img {
+    width: 12px; /* Further reduce image size */
+  }
+}
+
+/* ------------------------------------------------ */

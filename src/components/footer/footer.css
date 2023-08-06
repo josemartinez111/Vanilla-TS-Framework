@@ -1,5 +1,5 @@
 /* FILE: components/footer/footer.css */
-
+/* --------------------------------------------------- */
 .footer {
   list-style-type:  none;
   padding:          10px 30px;
@@ -29,7 +29,7 @@
 }
 
 .footer-link {
-  color:            #ffffff;
+  color:           #ffffff;
   text-decoration: none;
 }
 
@@ -42,3 +42,22 @@
   border-radius:  50%;
   vertical-align: middle;
 }
+
+/* Media queries for smaller screens */
+@media (max-width: 768px) {
+  .footer {
+    padding: 5px 10px; /* Reduce padding */
+    height:  60px; /* Reduce height */
+  }
+  
+  .footer p, .footer-link {
+    font-size: 0.5em; /* Further reduce font size */
+    margin:    2px; /* Reduce margin */
+  }
+  
+  .github {
+    width: 10px; /* Reduce icon size */
+  }
+}
+
+/* --------------------------------------------------- */

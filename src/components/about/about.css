@@ -88,4 +88,33 @@ p.description {
   vertical-align: middle; /* Align text vertically */
 }
 
+/* Media queries for smaller screens */
+@media (max-width: 768px) {
+  .about-description {
+    font-size: 0.7em; /* Reduce font size */
+  }
+  
+  .about-product {
+    width: 95%; /* Increase width */
+  }
+  
+  .about-product h1, .about-product p {
+    font-size: 0.8em; /* Reduce font size */
+  }
+  
+  .about-product img {
+    width:  100%; /* Increase width */
+    height: auto; /* Let height adjust naturally */
+  }
+  
+  .button-container {
+    flex-direction: column; /* Stack buttons vertically */
+  }
+  
+  .button-container button.about-button {
+    width:  100%; /* Increase button width */
+    height: auto; /* Let height adjust naturally */
+    margin: 5px 0; /* Adjust margin */
+  }
+}
 /* ________________________________________ */
