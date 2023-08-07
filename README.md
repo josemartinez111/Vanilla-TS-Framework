@@ -1,4 +1,9 @@
 # Uncle Jose's T-Shirt Shop
+___
+
+## You can find the deployed version here:
+### [LINK TO WEBSITE: Uncle Jose's T-Shirt Site](https://t-shirt-site.000webhostapp.com)
+___
 
 This project, masterminded by me `Jose Martinez`, serves as an `e-commerce` `Single Page Application`
 `(SPA)`, meticulously crafted using pure TypeScript, HTML, and CSS. The repository branch
@@ -772,7 +777,3 @@ npm run dev
 # OR
 pnpm run dev
 ```
-___
-## You can find the deployed version here: 
-### [LINK TO WEBSITE: Uncle Jose's T-Shirt Site](https://t-shirt-site.000webhostapp.com)
-
