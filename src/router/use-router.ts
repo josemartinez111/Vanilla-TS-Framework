@@ -37,7 +37,7 @@ export function useRouter(rootElement: HTMLElement): RouteChangeType {
     switch (routeName) {
       case 'home':
         console.log('Rendering HomePage');
-        rootElement.appendChild(HomePage());
+        rootElement.appendChild(await HomePage());
         break;
       case 'about':
         rootElement.appendChild(await AboutPage(productId));

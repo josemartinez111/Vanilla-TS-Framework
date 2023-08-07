@@ -130,7 +130,13 @@ button.add-to-cart-button, .remove-from-cart-button {
   
   button {
     font-size: 14px;
-    padding: 0.5em 1em;
+    padding:   0.5em 1em;
+  }
+  
+  .my-header {
+    margin-top: 80px;
+    font-size:  0.7em; /* Further reduce font size */
   }
 }
+
 /* ________________________________________ */
