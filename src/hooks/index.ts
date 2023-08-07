@@ -3,6 +3,8 @@
 
 export * from './use-about-events';
 export * from './use-cart-data';
+export * from './use-component-list';
+export * from './use-create-html';
 export * from './use-nav-active-tab.ts';
 export * from './use-products-events';
 // _______________________________________________

@@ -31,11 +31,11 @@ It also fetches from the `fake store API` to display a list of `products`.
 // FILE: router/use-router.ts
 // _______________________________________________
 
-import { AboutPage, CartPage, HomePage, ProductsPage } from "../pages";
+import { AboutPage, CartPage, HomePage, ProductsPage } from '../pages';
 
 type RouteChangeType = {
-	useRouteChange: () => Promise<void>
-}
+  useRouteChange: () => Promise<void>;
+};
 
 /**
  * @useRouter
@@ -45,54 +45,54 @@ type RouteChangeType = {
  * @returns {RouteChangeType} An object containing a function to handle route changes.
  */
 export function useRouter(rootElement: HTMLElement): RouteChangeType {
-	/**
-	 * @useRouteChange
-	 * handles route changes based on the URL hash.
-	 * It clears the root element and appends the new page based on the route name.
-	 * If the route name is not recognized, it defaults to the home route.
-	 * After changing the route, it dispatches a 'routechange' event with the new route name.
-	 */
-	const useRouteChange = async (): Promise<void> => {
-		console.log("Initial URL hash:", location.hash);
-		
-		// Clear the root element
-		rootElement.innerHTML = '';
-		
-		// Get the route name and product ID from the URL hash
-		let [routeName, productId] = location.hash.split('/');
-		// Remove the '#' from the route name
-		routeName = routeName.replace('#', '');
-		
-		// Append the correct page to the root element based on the route name
-		switch (routeName) {
-			case 'home':
-				console.log("Rendering HomePage");
-				rootElement.appendChild(HomePage());
-				break;
-			case 'about':
-				rootElement.appendChild(await AboutPage(productId));
-				break;
-			case 'products':
-				rootElement.appendChild(await ProductsPage());
-				break;
-			case 'cart':
-				rootElement.appendChild(await CartPage(productId));
-				break;
-			default:
-				// Default to the home route if the route name is not recognized
-				location.hash = 'home';
-				routeName = 'home';
-		}
-		
-		const routeChangeEvent = new CustomEvent('routechange', {
-			detail: routeName,
-		});
-		
-		// Dispatch a 'routechange' event with the new route name
-		window.dispatchEvent(routeChangeEvent);
-	};
-	
-	return { useRouteChange };
+  /**
+   * @useRouteChange
+   * handles route changes based on the URL hash.
+   * It clears the root element and appends the new page based on the route name.
+   * If the route name is not recognized, it defaults to the home route.
+   * After changing the route, it dispatches a 'routechange' event with the new route name.
+   */
+  const useRouteChange = async (): Promise<void> => {
+    console.log('Initial URL hash:', location.hash);
+    
+    // Clear the root element
+    rootElement.innerHTML = '';
+    
+    // Get the route name and product ID from the URL hash
+    let [routeName, productId] = location.hash.split('/');
+    // Remove the '#' from the route name
+    routeName = routeName.replace('#', '');
+    
+    // Append the correct page to the root element based on the route name
+    switch (routeName) {
+      case 'home':
+        console.log('Rendering HomePage');
+        rootElement.appendChild(await HomePage());
+        break;
+      case 'about':
+        rootElement.appendChild(await AboutPage(productId));
+        break;
+      case 'products':
+        rootElement.appendChild(await ProductsPage());
+        break;
+      case 'cart':
+        rootElement.appendChild(await CartPage(productId));
+        break;
+      default:
+        // Default to the home route if the route name is not recognized
+        location.hash = 'home';
+        routeName = 'home';
+    }
+    
+    const routeChangeEvent = new CustomEvent('routechange', {
+      detail: routeName,
+    });
+    
+    // Dispatch a 'routechange' event with the new route name
+    window.dispatchEvent(routeChangeEvent);
+  };
+  
+  return { useRouteChange };
 }
 ```
 
@@ -107,111 +107,67 @@ export function useRouter(rootElement: HTMLElement): RouteChangeType {
 <img width="550" alt="home-page" src="public/assets/images/readme-images/cart-default.png"> <img width="550" alt="home-page" src="public/assets/images/readme-images/cart-item.png">
 
 ```ts
-// FILE: components/cart/cart.ts
+// FILE: components/CartItem.ts
 // _______________________________________________
 
-import { CartItemComponent } from "./cart-item";
-import { ProductType } from "../../types/types";
-import { useCartData } from '../../hooks/use-cart-data';
+import { useCreateHTML } from '../../hooks';
+import { ProductType } from '../../types/types';
+import { useLocalStorage } from '../../hooks/use-local-storage';
 import './cart.css';
 
-export async function CartComponent(product?: ProductType): Promise<DocumentFragment> {
-	const {
-		productData: defaultProductData,
-		bindGoBackButton,
-		paypalIcon,
-		applePayIcon,
-	} = await useCartData();
-	
-	let cartProducts: Array<ProductType> = [];
-	
-	// If there is no product in the cart, set the
-	// cart products to the default product data
-	if (!product) cartProducts = defaultProductData; else {
-		cartProducts.push(product);
-	}
-	
-	// Create a new div element to hold all the cart items
-	const divElement = document.createElement('div');
-	divElement.classList.add("cart-container");
-	
-	// Create a div for the left side of the cart (items)
-	const cartSideDiv = document.createElement('div');
-	cartSideDiv.classList.add("cart-side");
-	
-	const renderCart = async () => {
-		// Logic to re-render the cart goes here
-		cartSideDiv.innerHTML = '';
-		
-		// if there is a product in the cart, render it
-		// by appending it to the cart-side div element
-		cartProducts.forEach((item: ProductType) => {
-			cartSideDiv.appendChild(
-				CartItemComponent({
-					item,
-					paypalIcon,
-					applePayIcon,
-					renderCart,
-				}));
-		});
-	};
-	
-	// Render the cart
-	await renderCart();
-	
-	// Append the cart-side div to the main div element
-	divElement.appendChild(cartSideDiv);
-	
-	// Create the right side div (the form)
-	const formDiv = document.createElement('div');
-	// Add the cart-side and pay-form classes to the form div
-	formDiv.classList.add("cart-side", "pay-form");
-	
-	// Set the innerHTML of the form div to the form HTML
-	formDiv.innerHTML = (`
-        <label class="cart-input-label" for="name">
-            Name
-            <input class="cart-input" type="text" id="name" name="name" placeholder="Name" required />
-        </label>
-        <label class="cart-input-label" for="email">
-            Email
-            <input class="cart-input" type="email" id="email" name="email" placeholder="Email" required />
-        </label>
-        <label class="cart-input-label" for="card">
-            Credit Card
-            <input class="cart-input cdc" type="text" id="card" name="card" placeholder="💳    • • • •  • • • •  • • • •" required />
-        </label>
-        <button class="btn pay-now add-to-cart-button" type="submit">
-            Pay Now
-        </button>
-        <button class="btn go-back add-to-cart-button">
-            Go Back to Products
-        </button>
-				<h1 class="text">Uncle Jose's T-Shirt</h1>
-    
-    `);
-	
-	// Append the form div to the main div element
-	divElement.appendChild(formDiv);
-	
-	// Bind the click event to the "Go Back" button
-	bindGoBackButton(divElement);
-	
-	// Create a document fragment and append the div element to it
-	const groupedDomNodesFragment = document.createDocumentFragment();
-	// Append the div element to the document fragment
-	groupedDomNodesFragment.appendChild(divElement);
-	
-	return groupedDomNodesFragment;
+export type CartItemProps = {
+  item: ProductType;
+  paypalIcon: string;
+  applePayIcon: string;
+  renderCart: () => void;
 }
+
+export function CartItemComponent({
+  item,
+  paypalIcon,
+  applePayIcon,
+  renderCart,
+}: CartItemProps): HTMLDivElement {
+  const { localeStorageRemoveItem } = useLocalStorage();
+
+  // Create a new div element and set its innerHTML to the cart item's HTML
+  const cartItemElement = document.createElement('div');
+  cartItemElement.classList.add('cart-item');
+
+  useCreateHTML(cartItemElement, () => (`
+        <img class='cart-image' src='${ item.image }' alt='${ item.title }' />
+        <div class='cart-title'>${ item.title }</div>
+        <div class='cart-price'>$${ item.price.toFixed(2) }</div>
+        <div class='pay-option'>
+            <button class='btn btn-icon add-to-cart-button'>
+                <img class='btn-icon' src='${ paypalIcon }' alt='PayPal' />
+            </button>
+        </div>
+        <div class='pay-option'>
+            <button class='btn btn-icon add-to-cart-button'>
+                <img class='btn-icon' src='${ applePayIcon }' alt='Apple Pay' />
+            </button>
+        </div>
+        <button class='btn remove-item remove-from-cart-button'>
+					Remove
+				</button>
+    `));
+  // Handle click event for the 'Remove' button
+  const removeButton = cartItemElement.querySelector('.remove-item');
+  removeButton?.addEventListener('click', async () => {
+    localeStorageRemoveItem(item.id || 0);
+    // Call the passed function to re-render the cart UI
+    renderCart();
+  });
+
+  return cartItemElement;
+}
+
 ```
 
 <img width="670" alt="home-page" src="public/assets/images/readme-images/products-page.png">
 
 ```ts
-// FILE: components/products/products.ts
-// _______________________________________________
-
 // FILE: components/products/products.ts
 // _______________________________________________
 
@@ -262,13 +218,12 @@ export async function ProductsComponent(category: string, limit: number = 24): P
 ```
 
 ##### Code Example - Custom Hooks
-
 ```ts
 // FILE: hooks/use-cart-data.ts
 // _______________________________________________
 
-import { ProductType } from "../types/types";
-import { useFakeStoreApi } from "../api/use-fake-store-api";
+import { ProductType } from '../types/types';
+import { useFakeStoreApi } from '../api/use-fake-store-api';
 
 // Define the return type for the useCartData hook
 export type CartDataType = {
@@ -292,14 +247,14 @@ export type CartDataType = {
  */
 export async function useCartData(): Promise<CartDataType> {
   // URLs for the payment icons
-  const paypalIcon = "/assets/images/paypal.png";
-  const applePayIcon = "/assets/images/apple-pay.png";
-
+  const paypalIcon = '/assets/images/paypal.png';
+  const applePayIcon = '/assets/images/apple-pay.png';
+  
   // Fetch the items in the cart from localStorage
   const { fetchAllCartItems, fetchSingleProduct } = useFakeStoreApi();
   // Get the array of product IDs from localStorage
   const cartItems = await fetchAllCartItems();
-
+  
   // Define a default product data
   const defaultProductData: ProductType = {
     title: 'No items in your cart',
@@ -308,22 +263,22 @@ export async function useCartData(): Promise<CartDataType> {
     category: '',
     description: '',
   };
-
+  
   // Initialize the product data with default value
   let productData: ProductType[] = [defaultProductData];
-
+  
   // If there are items in the cart, fetch the product data for each item
   if (cartItems.length > 0) {
     productData = await Promise.all(
-            cartItems.map((id: ProductType) => (
-                    fetchSingleProduct(Number(id))
-            )));
+      cartItems.map((id: ProductType) => (
+        fetchSingleProduct(Number(id))
+      )));
   }
-
+  
   // Define the function to handle the click event of the "Go Back" button
   const bindGoBackButton = (cartItemElement: HTMLDivElement) => {
     const goBackButton = cartItemElement.querySelector('.go-back') as HTMLButtonElement;
-
+    
     // Check if the button exists before trying to bind an event
     if (!goBackButton) {
       console.error('Could not bind event. Go Back button does not exist.');
@@ -336,13 +291,121 @@ export async function useCartData(): Promise<CartDataType> {
       };
     }
   };
-
+  
   return {
     productData,
     bindGoBackButton,
     paypalIcon,
     applePayIcon,
   };
+}
+```
+The `useCreateHTML` hook provides a `utility` to insert `HTML` markup into a given `DOM element`. 
+By passing a `DOM` element and a `callback function` that returns an `HTML string`, you can 
+effortlessly inject markup into that `DOM element`.
+```ts
+// FILE: hooks/use-create-html.ts
+// _______________________________________________
+
+type CustomElement = HTMLDivElement | HTMLElement;
+
+export function useCreateHTML(element: CustomElement, htmlTemplateCallback: () => string): void {
+  element.innerHTML = htmlTemplateCallback();
+}
+```
+```ts
+// FILE: home/home.ts
+// _______________________________________________
+
+import './home.css';
+import { useCreateHTML } from '../../hooks';
+
+export function HomeComponent(): DocumentFragment {
+  const groupedDomNodesFragment = new DocumentFragment();
+  const imageSrc = '/assets/images/shopping.jpg';
+  const mainElement = document.createElement('main');
+  
+  useCreateHTML(mainElement, () => (`
+    <div class='home-container'>
+      <div class='home-content'>
+        <img class='home-image' src='${ imageSrc }' alt='Shopping'>
+        <div class='home-text'>
+          <h1>Welcome to Uncle Jose's T-Shirt Site!</h1>
+          <p class='home-paragraph'>
+            Discover our unique, handmade t-shirts & other
+            products as well.<br>For the best in quality apparel for men & women,
+            come see us! We would love to provide you quality service that only old
+            Uncle Jose can provide.
+            See you inside!
+          </p>
+        </div>
+      </div>
+    </div>
+  `));
+  
+  groupedDomNodesFragment.appendChild(mainElement);
+  return groupedDomNodesFragment;
+}
+```
+The `useComponentList` hook assists in `appending` components to a `DocumentFragment` 
+based on a `specified order`. By passing a `DocumentFragment` and an `object` representing 
+the order of `components`, this hook ensures that components are added in the `desired sequence`.
+```ts
+// FILE: hooks/use-component-list.ts
+// _______________________________________________
+
+type ComponentListProps = {
+  groupedFragment: DocumentFragment;
+  componentOrder: { [order: number]: Function | (() => Promise<HTMLElement>) };
+}
+
+export async function useComponentList({ groupedFragment, componentOrder }: ComponentListProps): Promise<void> {
+  const sortedKeys = Object.keys(componentOrder)
+    .sort((orderA: string, orderB: string) => {
+      return parseInt(orderA) - parseInt(orderB);
+    });
+
+  const handleAllPromises = () => async (key: string) => {
+    const componentFnOrPromise = componentOrder[parseInt(key)];
+    const result = componentFnOrPromise();
+    return await result;
+  };
+
+  const components = await Promise.all(sortedKeys.map(handleAllPromises()));
+  components.forEach((component: HTMLElement) => (
+    groupedFragment.appendChild(component)
+  ));
+}
+```
+```ts
+// FILE: pages/products/products.ts
+// _______________________________________________
+
+import {
+  FooterComponent,
+  HeaderComponent,
+  NavbarComponent,
+  ProductsComponent,
+} from '../../components';
+import { useComponentList } from '../../hooks';
+
+export async function ProductsPage(): Promise<DocumentFragment> {
+  const groupedDomNodesFragment = new DocumentFragment();
+  
+  const componentOrder = {
+    1: NavbarComponent,
+    2: HeaderComponent,
+    3: async () => await ProductsComponent("men's clothing"),
+    4: async () => await ProductsComponent("women's clothing"),
+    5: FooterComponent,
+  };
+  
+  await useComponentList({
+    groupedFragment: groupedDomNodesFragment,
+    componentOrder: componentOrder,
+  });
+  
+  return groupedDomNodesFragment;
 }
 ```
 
@@ -469,6 +532,24 @@ export function useFakeStoreApi() {
 ```elixir
 .
 ├── README.md
+├── dist
+│   ├── assets
+│   │   ├── fonts
+│   │   │   ├── Audiowide-Regular.ttf
+│   │   │   ├── Goldman-Bold.ttf
+│   │   │   ├── Goldman-Regular.ttf
+│   │   │   └── Gotham-ssm-medium.otf
+│   │   ├── images
+│   │   │   ├── apple-pay.png
+│   │   │   ├── cart.png
+│   │   │   ├── paypal.png
+│   │   │   ├── readme-images
+│   │   │   ├── shopping.jpg
+│   │   │   └── white_amz_cart.png
+│   │   ├── index-61c3f83d.js
+│   │   └── index-7515acb8.css
+│   ├── index.html
+│   └── vite.svg
 ├── index.html
 ├── package.json
 ├── pnpm-lock.yaml
@@ -483,6 +564,7 @@ export function useFakeStoreApi() {
 │   │       ├── apple-pay.png
 │   │       ├── cart.png
 │   │       ├── paypal.png
+│   │       ├── readme-images
 │   │       ├── shopping.jpg
 │   │       └── white_amz_cart.png
 │   └── vite.svg
@@ -494,6 +576,7 @@ export function useFakeStoreApi() {
 │   │   │   ├── about.css
 │   │   │   └── about.ts
 │   │   ├── cart
+│   │   │   ├── cart-item.ts
 │   │   │   ├── cart.css
 │   │   │   └── cart.ts
 │   │   ├── footer
@@ -513,7 +596,11 @@ export function useFakeStoreApi() {
 │   │       └── products.ts
 │   ├── hooks
 │   │   ├── index.ts
+│   │   ├── use-about-events.ts
 │   │   ├── use-cart-data.ts
+│   │   ├── use-component-list.ts
+│   │   ├── use-create-html.ts
+│   │   ├── use-local-storage.ts
 │   │   ├── use-nav-active-tab.ts
 │   │   └── use-products-events.ts
 │   ├── main.ts
@@ -529,15 +616,18 @@ export function useFakeStoreApi() {
 │   │       └── products.ts
 │   ├── router
 │   │   └── use-router.ts
-│   ├── style.css
+│   ├── store
+│   │   └── cart-store.ts
 │   ├── styles
 │   │   └── main.css
 │   ├── types
+│   │   ├── local-storage.d.ts
 │   │   └── types.d.ts
 │   └── vite-env.d.ts
-└── tsconfig.json
+├── tsconfig.json
+└── vite.config.ts
 
-24 directories, 45 files
+31 directories, 65 files
 ```
 
 - **State Management**: State management in this application is handled
@@ -551,56 +641,58 @@ export function useFakeStoreApi() {
 // FILE: components/about/about.ts
 // _______________________________________________
 
-import { useAboutEvents } from "../../hooks";
-import { useFakeStoreApi } from "../../api/use-fake-store-api";
+import { useAboutEvents, useCreateHTML } from '../../hooks';
+import { useFakeStoreApi } from '../../api/use-fake-store-api';
 import './about.css';
 
 export async function AboutComponent(productId?: string): Promise<DocumentFragment> {
-	const {
-		onProductContentClick,
-		onAddToCartClick,
-		onGoBackClick,
-	} = useAboutEvents();
-	
-	const groupedDomNodesFragment = new DocumentFragment();
-	const aboutInfoDivElement = document.createElement('div');
-	
-	if (productId) {
-		const { fetchSingleProduct } = useFakeStoreApi();
-		const productData = await fetchSingleProduct(Number(productId));
-		
-		const productDivElement = document.createElement('div');
-		productDivElement.classList.add('about-product');
-		
-		productDivElement.innerHTML = (`
-			<div class="product-content" data-id="${ productData.id }">
+  const {
+    onProductContentClick,
+    onAddToCartClick,
+    onGoBackClick,
+  } = useAboutEvents();
+  
+  const groupedDomNodesFragment = new DocumentFragment();
+  const aboutInfoDivElement = document.createElement('div');
+  
+  if (productId) {
+    const { fetchSingleProduct } = useFakeStoreApi();
+    const productData = await fetchSingleProduct(Number(productId));
+    
+    const productDivElement = document.createElement('div');
+    productDivElement.classList.add('about-product');
+    
+    // if item is selected => detailed about page
+    useCreateHTML(productDivElement, () => (`
+			<div class='product-content' data-id='${ productData.id }'>
 		    <h1>${ productData.title }</h1>
-		    <img src="${ productData.image }" alt="${ productData.title }" />
-		    <p class="description">${ productData.description }</p>
-		    <p class="product-price">$${ productData.price.toFixed(2) }</p>
-		    <div class="button-container">  <!-- New button container -->
-		      <button class="btn1 about-button add-to-cart add-to-cart-button" data-id="${ productData.id }">
+		    <img src='${ productData.image }' alt='${ productData.title }' />
+		    <p class='description'>${ productData.description }</p>
+		    <p class='product-price'>$${ productData.price.toFixed(2) }</p>
+		    <div class='button-container'>  <!-- New button container -->
+		      <button class='btn1 about-button add-to-cart add-to-cart-button' data-id='${ productData.id }'>
 		       Add to Cart
 		      </button>
-		      <button class="btn2 about-button go-back add-to-cart-button">
+		      <button class='btn2 about-button go-back add-to-cart-button'>
 		       Go Back to Products
 		      </button>
 		    </div>
       </div>
-		`);
-		
-		
-		onProductContentClick(productDivElement, Number(productData.id));
-		onAddToCartClick(productDivElement, Number(productData.id));
-		onGoBackClick(productDivElement);
-		
-		groupedDomNodesFragment.appendChild(productDivElement);
-	}
-	
-	aboutInfoDivElement.innerHTML = productId ? '' : (`
-		<div class="about-info">
+		`));
+    
+    
+    onProductContentClick(productDivElement, Number(productData.id));
+    onAddToCartClick(productDivElement, productData);
+    onGoBackClick(productDivElement);
+    
+    groupedDomNodesFragment.appendChild(productDivElement);
+  }
+  
+  // default about page
+  useCreateHTML(aboutInfoDivElement, () => productId ? '' : (`
+		<div class='about-info'>
 			<h1>About Uncle Jose's T-Shirt Site</h1>
-			<p class="about-description">
+			<p class='about-description'>
 				Welcome to Uncle Jose's T-Shirt Site! Our story begins with a passion for unique,
 				handmade t-shirts. We believe in creating high-quality t-shirts that express individuality
 				and personal style. Each t-shirt is crafted with care and attention to detail. We're committed
@@ -609,11 +701,12 @@ export async function AboutComponent(productId?: string): Promise<DocumentFragme
 				Jose's T-Shirt Site!
 			</p>
 		</div>
-	`);
-	
-	groupedDomNodesFragment.appendChild(aboutInfoDivElement);
-	return groupedDomNodesFragment;
+	`));
+  
+  groupedDomNodesFragment.appendChild(aboutInfoDivElement);
+  return groupedDomNodesFragment;
 }
+
 ```
 
 ```ts
@@ -621,41 +714,52 @@ export async function AboutComponent(productId?: string): Promise<DocumentFragme
 // _______________________________________________
 
 import {
-	AboutComponent,
-	FooterComponent,
-	HeaderComponent,
-	NavbarComponent,
-} from "../../components";
+  AboutComponent,
+  FooterComponent,
+  HeaderComponent,
+  NavbarComponent,
+} from '../../components';
+import { useComponentList } from '../../hooks';
 
 export async function AboutPage(productId?: string): Promise<DocumentFragment> {
-	const groupedDomNodesFragment = new DocumentFragment();
-	
-	groupedDomNodesFragment.appendChild(NavbarComponent());
-	groupedDomNodesFragment.appendChild(HeaderComponent());
-	
-	const mainElement = document.createElement('main');
-	const aboutProduct = await AboutComponent(productId);
-	mainElement.appendChild(aboutProduct);
-	
-	groupedDomNodesFragment.appendChild(mainElement);
-	groupedDomNodesFragment.appendChild(FooterComponent());
-	
-	return groupedDomNodesFragment;
+  const groupedDomNodesFragment = new DocumentFragment();
+  
+  const handleAboutComponent = () => async () => {
+    const mainElement = document.createElement('main');
+    const aboutProduct = await AboutComponent(productId);
+    
+    mainElement.appendChild(aboutProduct);
+    return mainElement;
+  };
+  
+  // Define the components you want to add in the desired order
+  const componentOrder = {
+    1: NavbarComponent,
+    2: HeaderComponent,
+    3: handleAboutComponent(),
+    4: FooterComponent,
+  };
+  
+  await useComponentList({
+    groupedFragment: groupedDomNodesFragment,
+    componentOrder: componentOrder,
+  });
+  
+  return groupedDomNodesFragment;
 }
 ```
 
 ## Project Structure
 
-- `src`: Contains the TypeScript source code.
-    - `api`: Contains the service to fetch data from the Fake Store API.
-    - `components`: Contains reusable UI components.
-    - `hooks`: Contains some custom hooks to abstract logic from
-      components.
-    - `pages`: Contains the different views of the application.
-    - `router`: Contains the custom router hook.
-    - `styles`: Contains the global CSS styles.
-    - `types`: Contains the custom types help us throughout the app.
-- `public`: Contains static assets such as images and fonts.
+- **src**: Contains the TypeScript source code.
+  - **api**: Contains the service to fetch data from the Fake Store API.
+  - **components**: Contains reusable UI components.
+  - **hooks**: Contains some custom hooks to abstract logic from components.
+  - **pages**: Contains the different views of the application.
+  - **router**: Contains the custom router hook.
+  - **styles**: Contains the global CSS styles.
+  - **types**: Contains the custom types to help us throughout the app.
+- **public**: Contains static assets such as images and fonts.
 
 ## Running the Project
 

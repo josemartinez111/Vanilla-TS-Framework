@@ -7,22 +7,24 @@ import {
 	NavbarComponent,
 	ProductsComponent,
 } from "../../components";
+import { useComponentList } from '../../hooks';
 
 export async function ProductsPage(): Promise<DocumentFragment> {
 	const groupedDomNodesFragment = new DocumentFragment();
 	
-	groupedDomNodesFragment.appendChild(NavbarComponent());
-	groupedDomNodesFragment.appendChild(HeaderComponent());
+	// Define the components you want to add in the desired order
+	const componentOrder = {
+		1: NavbarComponent,
+		2: HeaderComponent,
+		3: async () => await ProductsComponent("men's clothing"), // Fetch men's clothing
+		4: async () => await ProductsComponent("women's clothing"), // Fetch women's clothing
+		5: FooterComponent
+	};
 	
-	// Fetch men's clothing (Component is `async`)
-	const mensClothingDataFromComponent = await ProductsComponent("men's clothing");
-	groupedDomNodesFragment.appendChild(mensClothingDataFromComponent);
-	
-	// Fetch women's clothing (Component is `async`)
-	const womensClothingDataFromComponent = await ProductsComponent("women's clothing");
-	groupedDomNodesFragment.appendChild(womensClothingDataFromComponent);
-	
-	groupedDomNodesFragment.appendChild(FooterComponent());
+	await useComponentList({
+		groupedFragment: groupedDomNodesFragment,
+		componentOrder: componentOrder,
+	});
 	
 	return groupedDomNodesFragment;
 }
